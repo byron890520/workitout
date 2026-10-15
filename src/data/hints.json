@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "game": "wordle",
+    "date": "2026-10-15",
+    "answer": "DUNCE",
+    "clue": "Someone slow to catch on – old classrooms gave them a pointed cap to wear",
+    "number": 1944
+  }
+]
