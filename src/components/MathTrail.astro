@@ -1,0 +1,96 @@
+---
+// A trail of numbers and maths symbols that follows the mouse, then fades.
+// Mouse only (not touch), off for reduced-motion, and paused over form fields so typing stays calm.
+---
+<canvas id="math-trail" aria-hidden="true"></canvas>
+<style is:global>
+  #math-trail { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+</style>
+<script>
+  const canvas = document.getElementById("math-trail") as HTMLCanvasElement | null;
+  const fine = matchMedia("(pointer: fine)").matches;
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (canvas && fine && !calm) {
+    const ctx = canvas.getContext("2d")!;
+    const GLYPHS = "0123456789+−×÷=%R";
+    const LIFE = 1000;          // ms each glyph lives
+    const STEP = 26;           // px of movement between glyphs
+    const MAX = 48;            // cap on glyphs on screen
+    type P = { x: number; y: number; vx: number; vy: number; rot: number; vr: number; ch: string; size: number; color: string; born: number };
+    let parts: P[] = [];
+    let raf = 0, lastX = -1, lastY = -1, dpr = 1, colors: string[] = [], font = "";
+
+    const readTheme = () => {
+      const s = getComputedStyle(document.documentElement);
+      colors = [s.getPropertyValue("--fynbos").trim(), s.getPropertyValue("--marigold").trim(), s.getPropertyValue("--marigold-deep").trim()];
+      font = s.getPropertyValue("--display").trim() || "sans-serif";
+    };
+    const resize = () => {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = innerWidth * dpr;
+      canvas.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    readTheme();
+    resize();
+    addEventListener("resize", resize);
+    matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", readTheme);
+
+    const spawn = (x: number, y: number, dx: number, dy: number) => {
+      const len = Math.hypot(dx, dy) || 1;
+      parts.push({
+        x, y,
+        // drift slightly backwards from the direction of travel, and upward
+        vx: (-dx / len) * 0.25 + (Math.random() - 0.5) * 0.35,
+        vy: (-dy / len) * 0.25 - 0.35 - Math.random() * 0.25,
+        rot: (Math.random() - 0.5) * 0.6,
+        vr: (Math.random() - 0.5) * 0.004,
+        ch: GLYPHS[(Math.random() * GLYPHS.length) | 0],
+        size: 18 + Math.random() * 16,
+        color: colors[(Math.random() * colors.length) | 0],
+        born: performance.now(),
+      });
+      if (parts.length > MAX) parts.shift();
+      if (!raf) raf = requestAnimationFrame(draw);
+    };
+
+    const draw = (now: number) => {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      parts = parts.filter((p) => now - p.born < LIFE);
+      for (const p of parts) {
+        const t = (now - p.born) / LIFE;            // 0 → 1
+        p.x += p.vx * 1.6;
+        p.y += p.vy * 1.6;
+        p.rot += p.vr * 16;
+        const pop = t < 0.15 ? t / 0.15 : 1;          // quick grow-in
+        const scale = 0.6 + 0.4 * pop - 0.25 * t;
+        ctx.save();
+        ctx.globalAlpha = Math.pow(1 - t, 1.4);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.scale(scale, scale);
+        ctx.font = `800 ${p.size}px ${font}`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = p.color;
+        ctx.fillText(p.ch, 0, 0);
+        ctx.restore();
+      }
+      raf = parts.length ? requestAnimationFrame(draw) : 0;
+    };
+
+    addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      // keep things quiet while someone is filling in a form or using the Tools menu
+      const el = e.target as Element | null;
+      if (el?.closest?.("input, select, textarea, .tools-panel, .intro")) { lastX = -1; return; }
+      if (lastX < 0) { lastX = e.clientX; lastY = e.clientY; return; }
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      if (Math.hypot(dx, dy) < STEP) return;
+      spawn(e.clientX, e.clientY, dx, dy);
+      lastX = e.clientX; lastY = e.clientY;
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => { lastX = -1; });
+  }
+</script>

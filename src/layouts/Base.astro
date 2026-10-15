@@ -4,6 +4,7 @@ import "@fontsource/atkinson-hyperlegible/latin-400.css";
 import "@fontsource/atkinson-hyperlegible/latin-700.css";
 import "../styles/global.css";
 import ToolsMenu from "../components/ToolsMenu.jsx";
+import MathTrail from "../components/MathTrail.astro";
 import { CONFIG, DEMO, BASE, TOOLS, glyphFor } from "../lib/site.js";
 
 const {
@@ -122,5 +123,6 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
   els.forEach(function (el) { io.observe(el); });
 })();
 </script>
+<MathTrail />
 </body>
 </html>
