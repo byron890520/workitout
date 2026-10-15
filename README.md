@@ -23,7 +23,7 @@ Built with **Astro + React**. Every page is pre-built as plain HTML, so Google s
 - Framework preset: **Astro**
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Environment variable: `NODE_VERSION` = `22` (Settings → Variables and secrets)
+- Node version: set by the `.node-version` file (24), no setting needed
 
 ## Daily hints
 
