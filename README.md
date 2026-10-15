@@ -1,6 +1,6 @@
 # Work It Out
 
-Free South African calculators (salary after tax, VAT, APS, prepaid electricity, transfer duty) plus daily Wordle and Wortel hints.
+Free South African calculators (salary after tax, VAT, compound interest, prepaid electricity, bond transfer duty) plus daily Wordle and Wortel hints.
 
 Built with **Astro + React**. Every page is pre-built as plain HTML, so Google sees the full content; React then runs the calculators, the 3D tile board and quick search in the browser.
 

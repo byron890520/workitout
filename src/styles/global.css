@@ -5,7 +5,7 @@
   --fynbos:#1d5a45;--fynbos-deep:#103326;--on-fynbos:#f3f7f2;
   --marigold:#f0ae2b;--marigold-deep:#b97c0c;--marigold-soft:#fbefd2;--on-marigold:#2a1e05;
   --panel:#123a2d;--on-panel:#f3f7f2;--panel-line:rgba(243,247,242,.16);
-  --grid:rgba(29,90,69,.075);--focus:#2563eb;
+  --grid:rgba(29,90,69,.075);--focus:#2563eb;--c-paid:#1f8457;--c-int:#c4840a;
   --display:"Bricolage Grotesque Variable","Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --r-sm:8px;--r-md:14px;--r-lg:22px;
@@ -16,13 +16,13 @@
   --fynbos:#49b98a;--fynbos-deep:#1f6b4c;--on-fynbos:#06130d;
   --marigold:#f3bc4a;--marigold-deep:#9a6608;--marigold-soft:#2b2414;--on-marigold:#1e1503;
   --panel:#18291f;--on-panel:#e7eee9;--panel-line:rgba(231,238,233,.12);
-  --grid:rgba(73,185,138,.07);--focus:#7aa7ff;color-scheme:dark}}
+  --grid:rgba(73,185,138,.07);--focus:#7aa7ff;--c-paid:#3ea078;--c-int:#b88620;color-scheme:dark}}
 :root[data-theme=dark]{
   --paper:#0e1512;--surface:#16201b;--ink:#e7eee9;--muted:#9eaba4;--line:#26332d;--line-deep:#0a110e;
   --fynbos:#49b98a;--fynbos-deep:#1f6b4c;--on-fynbos:#06130d;
   --marigold:#f3bc4a;--marigold-deep:#9a6608;--marigold-soft:#2b2414;--on-marigold:#1e1503;
   --panel:#18291f;--on-panel:#e7eee9;--panel-line:rgba(231,238,233,.12);
-  --grid:rgba(73,185,138,.07);--focus:#7aa7ff;color-scheme:dark}
+  --grid:rgba(73,185,138,.07);--focus:#7aa7ff;--c-paid:#3ea078;--c-int:#b88620;color-scheme:dark}
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -311,3 +311,30 @@ header.site .wrap{justify-content:space-between}
 }
 
 .keypad li>div{box-shadow:none;border-style:dashed;opacity:.85}
+
+/* compound interest growth chart */
+.chart-card{margin-top:18px;display:block}
+.chart-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;margin-bottom:14px}
+.chart-head h2{margin:0;font-size:1.2rem}
+.legend{list-style:none;margin:0;padding:0;display:flex;gap:16px;font-size:.9rem;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;flex:none}
+.sw.paid{background:var(--c-paid)}.sw.int{background:var(--c-int)}
+.chart{position:relative;height:260px;margin-left:52px}
+.chart .grid{position:absolute;inset:0;pointer-events:none}
+.chart .grid div{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.chart .grid span{position:absolute;right:calc(100% + 8px);top:-.6em;font-size:.75rem;color:var(--muted);white-space:nowrap}
+.chart .bars{position:absolute;inset:0;display:flex;align-items:flex-end;gap:2px}
+.chart .col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;position:relative;outline:none;min-width:0}
+.chart .col:focus-visible .stack{outline:2px solid var(--focus);outline-offset:2px}
+.chart .stack{display:flex;flex-direction:column;gap:2px;border-radius:4px 4px 0 0;overflow:hidden;transition:height .45s var(--ease-out),opacity .15s;min-height:1px}
+.chart .seg{display:block;min-height:0}
+.chart .seg.paid{background:var(--c-paid)}.chart .seg.int{background:var(--c-int)}
+.chart .bars:hover .col:not(.on) .stack{opacity:.55}
+.chart .x{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--muted)}
+.axis-note{margin:26px 0 0;text-align:center;font-size:.8rem;color:var(--muted)}
+.chart .tip{position:absolute;top:6px;transform:translateX(-50%);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 12px 24px -12px rgba(0,0,0,.35);display:grid;gap:3px;font-size:.85rem;white-space:nowrap;pointer-events:none;z-index:2}
+.chart .tip strong{font-family:var(--display)}
+.chart .tip span{display:flex;align-items:center;gap:6px}
+.table-view{margin-top:16px}
+@media(max-width:520px){.chart{height:210px;margin-left:44px}}

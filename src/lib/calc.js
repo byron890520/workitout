@@ -55,24 +55,32 @@ export function vat(amount, mode) {
   return { excl: amount, vat: amount * RATES.vat, incl: amount * (1 + RATES.vat) };
 }
 
-export function apsPoints(pct) {
-  pct = +pct;
-  if (!(pct >= 0)) return 0;
-  if (pct >= 80) return 7;
-  if (pct >= 70) return 6;
-  if (pct >= 60) return 5;
-  if (pct >= 50) return 4;
-  if (pct >= 40) return 3;
-  if (pct >= 30) return 2;
-  return 1;
-}
-
-export function aps(marks, loMark) {
-  const pts = marks.filter((m) => m !== "" && m != null && !isNaN(+m)).map(apsPoints)
-    .sort((a, b) => b - a).slice(0, 6);
-  const total = pts.reduce((s, p) => s + p, 0);
-  const lo = loMark === "" || loMark == null || isNaN(+loMark) ? null : apsPoints(loMark);
-  return { total, counted: pts.length, withLO: lo === null ? null : total + lo };
+/**
+ * Compound growth with monthly top-ups.
+ * Interest is added at the end of each compounding period (12, 4 or 1 times a year) on the balance at that point;
+ * top-ups are paid at the end of each month and can rise by a fixed % every year.
+ * Returns the final figures plus one row per year for the chart and table.
+ */
+export function compound({ start = 0, monthly = 0, rate = 0, years = 10, perYear = 12, escalate = 0 }) {
+  start = Math.max(0, +start || 0);
+  monthly = Math.max(0, +monthly || 0);
+  const r = Math.max(0, +rate || 0) / 100;
+  const n = Math.min(100, Math.max(0, Math.round(+years || 0)));
+  const p = [1, 4, 12].includes(+perYear) ? +perYear : 12;
+  const esc = Math.max(0, +escalate || 0) / 100;
+  const monthsPerPeriod = 12 / p;
+  let balance = start, paid = start, topUp = monthly;
+  const rows = [];
+  for (let y = 1; y <= n; y++) {
+    for (let m = 1; m <= 12; m++) {
+      if (m % monthsPerPeriod === 0) balance *= 1 + r / p;
+      balance += topUp;
+      paid += topUp;
+    }
+    rows.push({ year: y, balance, paid, interest: balance - paid });
+    topUp *= 1 + esc;
+  }
+  return { balance, paid, interest: balance - paid, rows };
 }
 
 export function transferDuty(price) {

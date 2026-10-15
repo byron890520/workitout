@@ -8,7 +8,7 @@ import { CONFIG, BASE, TOOLS, DEMO } from "../lib/site.js";
 const items = TOOLS.map((t) => ({ href: `/${t.slug}/`, ...t }));
 ---
 <Base title={`${CONFIG.brand} – Free South African Calculators & Daily Word Hints`}
-  description="Free South African calculators for salary after tax, VAT, APS score, prepaid electricity and transfer duty, plus daily Wordle and Wortel hints."
+  description="Free South African calculators for salary after tax, VAT, compound interest, prepaid electricity and bond transfer duty, plus daily Wordle and Wortel hints."
   h1="Free South African calculators"
   schema={{ "@type": "WebSite", name: CONFIG.brand, url: BASE + "/", inLanguage: "en-ZA",
     publisher: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" } }}>
@@ -16,7 +16,7 @@ const items = TOOLS.map((t) => ({ href: `/${t.slug}/`, ...t }));
   <section slot="hero" class="hero paper-band"><div class="wrap">
     <div>
       <h1>South African calculators and daily word hints</h1>
-      <p class="lede">Salary after tax, VAT, APS points, electricity units and transfer duty, using this year's SARS and Eskom figures. Plus a gentle nudge for today's Wordle.</p>
+      <p class="lede">Salary after tax, VAT, compound interest, electricity units and bond transfer duty, using this year's SARS and Eskom figures. Plus a gentle nudge for today's Wordle.</p>
       <div class="cta">
         <a class="btn btn-primary" href="/salary-calculator/">Work out my take-home pay</a>
         <a class="btn btn-ghost" href="/word-hints/">Get today's word hint</a>
@@ -32,6 +32,6 @@ const items = TOOLS.map((t) => ({ href: `/${t.slug}/`, ...t }));
   </section>
   {DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
   <h2>Built for South Africa</h2>
-  <p>Most online calculators are made for the US or UK. Ours use South African rules: SARS tax tables, 15% VAT, matric APS points, Eskom and municipal electricity tariffs, and SARS transfer duty. Each tool shows the formula and the official rates it uses, so you can check the working yourself.</p>
+  <p>Most online calculators are made for the US or UK. Ours use South African rules: SARS tax tables, 15% VAT, rand-based savings growth, Eskom and municipal electricity tariffs, and SARS transfer duty. Each tool shows the formula and the official rates it uses, so you can check the working yourself.</p>
   <p>Everything is free, works on your phone, and doesn't ask you to sign up. Every result has a share link, so you can send your sums to a partner, a parent or your accountant.</p>
 </Base>

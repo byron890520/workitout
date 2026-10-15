@@ -1,6 +1,6 @@
 // Quick sanity checks against hand-worked SARS examples. Run: npm test
 import assert from "node:assert/strict";
-import { salary, incomeTax, medicalCredit, transferDuty, vat, aps, units } from "../src/lib/calc.js";
+import { salary, incomeTax, medicalCredit, transferDuty, vat, compound, units } from "../src/lib/calc.js";
 
 const s = salary({ monthlyGross: 30000, age: 30 });
 assert.equal(Math.round(s.annualTax), 56172, "PAYE on R30 000/month");
@@ -10,6 +10,8 @@ assert.equal(medicalCredit(2), 9024, "medical credits, 2 members");
 assert.equal(transferDuty(1500000), 8700, "transfer duty R1.5m");
 assert.equal(transferDuty(1210000), 0, "transfer duty threshold");
 assert.equal(Math.round(vat(1150, "remove").excl), 1000, "remove VAT");
-assert.equal(aps([85, 72, 65, 55, 45, 35, 90], 60).total, 32, "APS best six");
+assert.equal(compound({ start: 10000, rate: 10, years: 10, perYear: 1 }).balance.toFixed(2), "25937.42", "lump sum, yearly compounding");
+assert.equal(compound({ monthly: 1000, rate: 10, years: 10, perYear: 12 }).balance.toFixed(2), "204844.98", "monthly top-ups, monthly compounding");
+assert.equal(compound({ start: 5000, monthly: 500, rate: 0, years: 3 }).balance, 23000, "no interest = what you paid in");
 assert.equal(units(500, 2.71).toFixed(1), "184.5", "prepaid units");
 console.log("All calculator checks passed.");

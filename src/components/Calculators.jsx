@@ -1,5 +1,5 @@
-import { salary, vat, aps, apsPoints, transferDuty, units, applianceCost, R, num, pct } from "../lib/calc.js";
-import { useRef } from "react";
+import { salary, vat, compound, transferDuty, units, applianceCost, R, num, pct } from "../lib/calc.js";
+import { useRef, useState } from "react";
 import { AnimatedNumber, useUrlState, ShareButton, Field, ResultPeek, MoneyInput, Chips, Checked } from "./shared.jsx";
 import { RATES } from "../lib/calc.js";
 
@@ -98,43 +98,124 @@ export function VatCalc() {
   );
 }
 
-export function ApsCalc() {
-  const [s, setS, set] = useUrlState({ m: ["", "", "", "", "", "", ""], lo: "" });
-  const r = aps(s.m, s.lo);
-  const setMark = (i) => (e) => setS((st) => { const m = [...st.m]; m[i] = e.target.value; return { ...st, m }; });
+export function CompoundCalc() {
+  const [s, setS, set] = useUrlState({ start: "10000", monthly: "1000", rate: "9", years: "20", freq: "12", esc: "0" });
+  const val = (key) => (v) => setS((st) => ({ ...st, [key]: v }));
+  const r = compound({ start: s.start, monthly: s.monthly, rate: s.rate, years: s.years, perYear: s.freq, escalate: s.esc });
   const res = useRef(null);
+  const share = r.balance > 0 ? r.interest / r.balance : 0;
   return (
-    <div className="tool">
-      <form className="card" onSubmit={(e) => e.preventDefault()}>
-        <p className="field-label">Your subject marks (%), excluding Life Orientation</p>
-        <div className="aps-grid">
-          {s.m.map((v, i) => (
-            <div className="aps-row" key={i}>
-              <input type="number" inputMode="numeric" min="0" max="100" placeholder={`Subject ${i + 1} mark %`}
-                aria-label={`Subject ${i + 1} percentage`} value={v} onChange={setMark(i)} />
-              <span className={"aps-pts" + (v !== "" ? " on" : "")}>{v === "" ? "" : `${apsPoints(v)} pts`}</span>
+    <>
+      <div className="tool">
+        <form className="card" onSubmit={(e) => e.preventDefault()}>
+          <Field id="c-start" label="Starting amount (R)">
+            <MoneyInput id="c-start" value={s.start} onValue={val("start")} />
+            <Chips values={[0, 10000, 50000, 100000]} current={s.start} onPick={val("start")} label={(v) => (v ? k(v) : "R0")} />
+          </Field>
+          <Field id="c-monthly" label="Monthly top-up (R)">
+            <MoneyInput id="c-monthly" value={s.monthly} onValue={val("monthly")} />
+            <Chips values={[500, 1000, 2500, 5000]} current={s.monthly} onPick={val("monthly")} label={k} />
+          </Field>
+          <Field id="c-rate" label="Interest or growth rate per year (%)" hint="Bank savings often pay 6–8%; long-term growth funds have averaged more, with ups and downs.">
+            <input id="c-rate" {...n} max="50" step="0.25" value={s.rate} onChange={set("rate")} />
+            <Chips values={[6, 8, 10, 12]} current={s.rate} onPick={val("rate")} label={(v) => v + "%"} />
+          </Field>
+          <Field id="c-years" label="How many years?">
+            <input id="c-years" type="number" inputMode="numeric" min="1" max="60" step="1" value={s.years} onChange={set("years")} />
+            <Chips values={[5, 10, 20, 30]} current={s.years} onPick={val("years")} label={(v) => v + " yrs"} />
+          </Field>
+          <div className="two">
+            <Field id="c-freq" label="Interest added">
+              <select id="c-freq" value={s.freq} onChange={set("freq")}>
+                <option value="12">Monthly</option><option value="4">Quarterly</option><option value="1">Yearly</option>
+              </select>
+            </Field>
+            <Field id="c-esc" label="Raise top-up each year (%)">
+              <input id="c-esc" {...n} max="30" step="1" value={s.esc} onChange={set("esc")} />
+            </Field>
+          </div>
+        </form>
+        <div className="result" aria-live="polite" ref={res}>
+          <div className="label">Value after {Math.round(+s.years || 0)} years</div>
+          <AnimatedNumber value={r.balance} format={R} />
+          <dl>
+            <dt>You paid in</dt><dd>{R(r.paid)}</dd>
+            <dt>Interest earned</dt><dd>{R(r.interest)}</dd>
+            <dt>Share that is interest</dt><dd>{pct(share)}</dd>
+          </dl>
+          <Checked>Interest is added {s.freq === "12" ? "monthly" : s.freq === "4" ? "quarterly" : "yearly"}; top-ups go in at the end of each month. Before tax and inflation.</Checked>
+          <ShareButton text={`Saving ${R(+s.monthly || 0)} a month at ${s.rate}% could grow to ${R(r.balance)} in ${s.years} years.`} />
+        </div>
+        <ResultPeek label="Final value" text={R(r.balance)} target={res} />
+      </div>
+      <GrowthChart rows={r.rows} />
+    </>
+  );
+}
+
+/** Rounds an axis maximum up to 1, 2 or 5 × a power of ten. */
+function niceMax(v) {
+  if (!(v > 0)) return { max: 1, step: 0.25 };
+  const raw = v / 4, p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * p).find((x) => x >= raw);
+  return { max: Math.ceil(v / step) * step, step };
+}
+const short = (v) => (v >= 1e6 ? `R${+(v / 1e6).toFixed(1)}m` : v >= 1000 ? `R${Math.round(v / 1000)}k` : `R${Math.round(v)}`);
+
+/** Stacked bars, one per year: what you paid in vs interest earned. */
+function GrowthChart({ rows }) {
+  const [hover, setHover] = useState(null);
+  if (!rows.length) return null;
+  const last = rows[rows.length - 1];
+  const { max, step } = niceMax(last.balance);
+  const ticks = [];
+  for (let t = 0; t <= max + 1e-9; t += step) ticks.push(t);
+  const every = rows.length > 30 ? 10 : rows.length > 12 ? 5 : rows.length > 6 ? 2 : 1;
+  const h = hover == null ? null : rows[hover];
+  return (
+    <section className="card chart-card" aria-labelledby="growth-h">
+      <div className="chart-head">
+        <h2 id="growth-h">How it grows, year by year</h2>
+        <ul className="legend">
+          <li><i className="sw paid" />You paid in</li>
+          <li><i className="sw int" />Interest earned</li>
+        </ul>
+      </div>
+      <div className="chart" onMouseLeave={() => setHover(null)}>
+        <div className="grid" aria-hidden="true">
+          {ticks.slice().reverse().map((t) => <div key={t} style={{ bottom: `${(t / max) * 100}%` }}><span>{short(t)}</span></div>)}
+        </div>
+        <div className="bars" role="img" aria-label={`After ${last.year} years: ${R(last.balance)}, of which ${R(last.paid)} paid in and ${R(last.interest)} interest.`}>
+          {rows.map((row, i) => (
+            <div key={row.year} className={"col" + (hover === i ? " on" : "")} tabIndex={0}
+              onMouseEnter={() => setHover(i)} onFocus={() => setHover(i)} onBlur={() => setHover(null)}
+              aria-label={`Year ${row.year}: ${R(row.balance)}`}>
+              <div className="stack" style={{ height: `${(row.balance / max) * 100}%` }}>
+                <span className="seg int" style={{ flexGrow: Math.max(row.interest, 0) }} />
+                <span className="seg paid" style={{ flexGrow: row.paid }} />
+              </div>
+              <span className="x">{row.year % every === 0 || i === 0 ? row.year : ""}</span>
             </div>
           ))}
         </div>
-        <p className="hint">Enter up to 7 subjects. Your best 6 are counted.</p>
-        <Field id="a-lo" label="Life Orientation mark % (optional)">
-          <input id="a-lo" type="number" inputMode="numeric" min="0" max="100" value={s.lo} onChange={set("lo")} />
-        </Field>
-      </form>
-      <div className="result" aria-live="polite" ref={res}>
-        <div className="label">Your APS score</div>
-        <AnimatedNumber value={r.total} format={(x) => String(Math.round(x))} />
-        <div className="meter" aria-hidden="true"><span style={{ width: `${(r.total / 42) * 100}%` }} /></div>
-        <dl>
-          <dt>Subjects counted</dt><dd>{r.counted} of 6</dd>
-          <dt>APS including LO</dt><dd>{r.withLO === null ? "–" : r.withLO}</dd>
-          <dt>Maximum possible</dt><dd>42</dd>
-        </dl>
-        <Checked>Uses the NSC achievement levels (1–7), best six subjects</Checked>
-        <ShareButton text={`My APS score is ${r.total}.`} />
+        {h && (
+          <div className="tip" style={{ left: `${((hover + 0.5) / rows.length) * 100}%` }} role="status">
+            <strong>Year {h.year}</strong>
+            <span>{R(h.balance)}</span>
+            <span><i className="sw paid" />Paid in {R(h.paid)}</span>
+            <span><i className="sw int" />Interest {R(h.interest)}</span>
+          </div>
+        )}
       </div>
-      <ResultPeek label={"APS"} text={String(r.total)} target={res} />
-    </div>
+      <p className="axis-note">Years</p>
+      <details className="table-view">
+        <summary>Show the year-by-year table</summary>
+        <div className="table-scroll"><table>
+          <thead><tr><th>Year</th><th>Paid in</th><th>Interest</th><th>Value</th></tr></thead>
+          <tbody>{rows.map((row) => <tr key={row.year}><td>{row.year}</td><td>{R(row.paid)}</td><td>{R(row.interest)}</td><td>{R(row.balance)}</td></tr>)}</tbody>
+        </table></div>
+      </details>
+    </section>
   );
 }
 

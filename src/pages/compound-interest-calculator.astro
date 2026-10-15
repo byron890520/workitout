@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { CompoundCalc } from "../components/Calculators.jsx";
+import { toolSchema, todaySA } from "../lib/site.js";
+
+const faqs = [
+  ["What is compound interest?", "It's interest on your interest. Each time interest is added, the next round is worked out on the bigger balance, so growth speeds up the longer you leave the money alone."],
+  ["How much will R1 000 a month grow to?", "At 10% a year with interest added monthly, R1 000 a month grows to about R204 845 after 10 years, of which R120 000 is what you paid in. Change the figures above to match your own plan."],
+  ["Does monthly compounding make a big difference?", "A little. Monthly compounding earns slightly more than yearly at the same rate, but the rate itself, how much you add, and how long you stay invested matter far more."],
+  ["Is tax taken into account?", "No. Interest above the annual exemption is taxable in South Africa, while growth inside a tax-free savings account is not. The results are also in today's rand before inflation."],
+];
+---
+<Base title="Compound Interest Calculator South Africa – Savings Growth"
+  description="Free compound interest calculator in rand. See how a lump sum and monthly top-ups grow over time, with a year-by-year chart and table."
+  h1="Compound interest calculator" lede="See what your savings could grow to, and how much of it is interest."
+  trail={[["Home", "/"], ["Compound interest calculator", "/compound-interest-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Compound Interest Calculator", "/compound-interest-calculator/", "Savings growth calculator with monthly contributions and compounding.")}>
+  <CompoundCalc client:load />
+  <h2>How compound interest works</h2>
+  <p>Every time interest is added to your account, it becomes part of the balance that earns interest next time. Early on the growth looks small, but over 10, 20 or 30 years the interest starts doing most of the work. That's why starting early usually beats saving more later.</p>
+  <p>The calculator adds your top-up at the end of each month and adds interest monthly, quarterly or yearly at the rate you choose. If you plan to raise your top-up each year, for example when you get an increase, set the yearly raise to see the effect.</p>
+  <p class="notice">Results are estimates before tax, fees and inflation. Investment growth isn't guaranteed and can go down as well as up.</p>
+  <Related exclude="compound-interest-calculator" />
+</Base>

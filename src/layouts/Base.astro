@@ -22,7 +22,7 @@ const ogName = path === "/" ? "home"
   : path.startsWith("/word-hints/wordle") ? "wordle"
   : path.startsWith("/word-hints/wortel") ? "wortel"
   : (path.split("/")[1] || "home");
-const ogKnown = ["home", "salary-calculator", "vat-calculator", "aps-calculator", "electricity-calculator", "transfer-duty-calculator", "word-hints", "wordle", "wortel"];
+const ogKnown = ["home", "salary-calculator", "vat-calculator", "compound-interest-calculator", "electricity-calculator", "transfer-duty-calculator", "word-hints", "wordle", "wortel"];
 const ogImage = `${BASE}/og/${ogKnown.includes(ogName) ? ogName : "home"}.png`;
 
 const crumbsLd = trail.length > 1 ? {

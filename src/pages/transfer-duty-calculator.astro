@@ -19,13 +19,14 @@ const faqs = [
   ["Do I pay transfer duty on a new development?", "Not if the seller is a VAT-registered developer selling in the course of their business. The price then includes VAT instead."],
 ];
 ---
-<Base title={`Transfer Duty Calculator South Africa ${ty} | SARS Rates`}
-  description={`Calculate SARS transfer duty on a property purchase in seconds using the ${ty} rates. No duty on homes up to R1.21 million.`}
-  h1="Transfer duty calculator" lede="Work out the SARS transfer duty on a home or property purchase."
-  trail={[["Home", "/"], ["Transfer duty calculator", "/transfer-duty-calculator/"]]} faqs={faqs} updated={todaySA()}
-  schema={toolSchema("Transfer Duty Calculator", "/transfer-duty-calculator/", "SARS transfer duty calculator.")}>
+<Base title={`Bond Transfer Duty Calculator South Africa ${ty} | SARS Rates`}
+  description={`Calculate bond transfer duty on a property purchase in seconds using the ${ty} rates. No duty on homes up to R1.21 million.`}
+  h1="Bond transfer duty calculator" lede="Work out the SARS transfer duty on a home or property purchase."
+  trail={[["Home", "/"], ["Bond transfer duty calculator", "/transfer-duty-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Bond Transfer Duty Calculator", "/transfer-duty-calculator/", "SARS transfer duty calculator.")}>
   <TransferDutyCalc client:load />
   <h2>Transfer duty rates ({ty})</h2>
+  <p>Transfer duty is often called bond transfer duty because it's paid when you buy a home, usually with a bond. It's a SARS tax on the transfer of the property itself, so you pay it whether or not you take out a bond.</p>
   <div class="table-scroll"><table><thead><tr><th>Property value</th><th>Transfer duty</th></tr></thead>
     <tbody>{rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table></div>
   <p>The buyer pays transfer duty, usually through the conveyancing attorney before the property is registered in their name. Remember to budget separately for conveyancing fees, bond registration costs and Deeds Office fees, which this calculator doesn't include.</p>
