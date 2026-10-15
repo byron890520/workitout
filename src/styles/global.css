@@ -100,7 +100,7 @@ nav.main a[aria-current=page]{background:var(--ink);color:var(--paper)}
 
 /* tool keypad */
 .keypad{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin:20px 0 8px;padding:0;list-style:none}
-.keypad a{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:0 4px 0 var(--line);transition:transform .15s var(--ease-out),box-shadow .15s var(--ease-out),border-color .15s}
+.keypad a,.keypad li>div{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:0 4px 0 var(--line);transition:transform .15s var(--ease-out),box-shadow .15s var(--ease-out),border-color .15s}
 .keypad a:hover{border-color:var(--fynbos);transform:translateY(-2px);box-shadow:0 6px 0 var(--line)}
 .keypad a:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .keypad a:hover .key{transform:rotate(0) translateY(-2px)}
@@ -309,3 +309,5 @@ header.site .wrap{justify-content:space-between}
   @keyframes pick-card{to{opacity:1;transform:none}}
   @keyframes pick-key{0%{transform:rotate(-4deg)}35%{transform:rotate(-4deg) translateY(5px);box-shadow:0 0 0 var(--fynbos-deep)}100%{transform:rotate(-4deg)}}
 }
+
+.keypad li>div{box-shadow:none;border-style:dashed;opacity:.85}
