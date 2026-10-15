@@ -20,6 +20,8 @@ export const TOOLS = [
     desc: "Units per rand, plus what each appliance costs to run.", keywords: "electricity prepaid units eskom kwh geyser appliance" },
   { slug: "transfer-duty-calculator", nav: "Bond transfer duty", title: "Bond Transfer Duty Calculator", glyph: "13%", alt: false,
     desc: "SARS transfer duty when you buy a property.", keywords: "bond transfer duty property house buy sars conveyancing costs" },
+  { slug: "woord-van-die-dag", nav: "Woord van die Dag", title: "Afrikaans Word of the Day", glyph: "Aa", alt: false,
+    desc: "Woord van die Dag: one Afrikaans word, explained in English.", keywords: "afrikaans woord van die dag word of the day learn afrikaans vocabulary" },
   { slug: "word-hints", nav: "Word hints", title: "Daily Word Game Hints", glyph: "A?", alt: true,
     desc: "Spoiler-free Wordle and Wortel hints, updated daily.", keywords: "wordle wortel hint answer today word game puzzle" },
 ];

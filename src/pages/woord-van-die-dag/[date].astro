@@ -1,0 +1,26 @@
+---
+import Base from "../../layouts/Base.astro";
+import WordCard from "../../components/WordCard.astro";
+import { publishedWords, datum } from "../../lib/woorde.js";
+import { BASE } from "../../lib/site.js";
+
+export function getStaticPaths() {
+  const words = publishedWords();
+  return words.map((w, i) => ({ params: { date: w.date }, props: { w, newer: words[i - 1], older: words[i + 1] } }));
+}
+const { w, newer, older } = Astro.props;
+const path = `/woord-van-die-dag/${w.date}/`;
+---
+<Base title={`${w.word} – Afrikaans Word of the Day (${datum(w.date)})`}
+  description={`${w.word} (${w.type_en}): ${w.meaning} Example: "${w.example_af}"`}
+  h1={`Woord van die Dag: ${w.word}`} updated={w.date}
+  trail={[["Home", "/"], ["Woord van die Dag", "/woord-van-die-dag/"], [w.word, path]]}
+  schema={{ "@type": "DefinedTerm", name: w.word, description: w.meaning, inLanguage: "af", url: BASE + path,
+    inDefinedTermSet: { "@type": "DefinedTermSet", name: "Afrikaanse Woord van die Dag", url: BASE + "/woord-van-die-dag/" } }}>
+  <WordCard w={w} />
+  <nav class="woord-nav" aria-label="More words">
+    {older ? <a href={`/woord-van-die-dag/${older.date}/`} lang="af">← {older.word}</a> : <span></span>}
+    <a href="/woord-van-die-dag/">Today's word</a>
+    {newer ? <a href={`/woord-van-die-dag/${newer.date}/`} lang="af">{newer.word} →</a> : <span></span>}
+  </nav>
+</Base>

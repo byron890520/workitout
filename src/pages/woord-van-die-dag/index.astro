@@ -1,0 +1,31 @@
+---
+import Base from "../../layouts/Base.astro";
+import WordCard from "../../components/WordCard.astro";
+import { publishedWords, datum } from "../../lib/woorde.js";
+import { BASE, DEMO } from "../../lib/site.js";
+
+const words = publishedWords();
+const w = words[0];
+const faqs = [
+  ["What is the Afrikaans word of the day?", "Every morning we pick one Afrikaans word and explain it in English, with an example sentence in both languages, so you can learn a little Afrikaans each day."],
+  ["Who is it for?", "Anyone learning Afrikaans, brushing up on school Afrikaans, or who just likes words. Afrikaans speakers often enjoy the English explanations too."],
+];
+---
+<Base title="Afrikaanse Woord van die Dag – Afrikaans Word of the Day"
+  description={w ? `Today's Afrikaans word: ${w.word} – ${w.meaning} Learn one Afrikaans word a day with English meanings and examples.` : "Learn one Afrikaans word a day, with its English meaning and an example sentence."}
+  h1="Woord van die Dag" lede="One Afrikaans word a day, explained in English."
+  trail={[["Home", "/"], ["Woord van die Dag", "/woord-van-die-dag/"]]} faqs={faqs} updated={w?.date}
+  schema={w ? { "@type": "DefinedTerm", name: w.word, description: w.meaning, inLanguage: "af", url: BASE + "/woord-van-die-dag/",
+    inDefinedTermSet: { "@type": "DefinedTermSet", name: "Afrikaanse Woord van die Dag", url: BASE + "/woord-van-die-dag/" } } : null}>
+  {w ? <WordCard w={w} /> : <p class="notice">The first word arrives tomorrow morning.</p>}
+  {DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
+  {words.length > 1 && (
+    <>
+      <h2>Vorige woorde · Previous words</h2>
+      <ul class="woord-list">
+        {words.slice(1, 61).map((x) => <li><a href={`/woord-van-die-dag/${x.date}/`} lang="af">{x.word}</a> <span>– {x.meaning}</span> <time datetime={x.date}>{datum(x.date)}</time></li>)}
+      </ul>
+    </>
+  )}
+  <p>A new word appears every morning. Bookmark this page, or try today's <a href="/word-hints/">Wordle hint</a> too.</p>
+</Base>

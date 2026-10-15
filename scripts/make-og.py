@@ -25,6 +25,7 @@ PAGES = [
     ("electricity-calculator", "Prepaid electricity calculator", "Units per rand and what each appliance costs to run", ("kWh", True)),
     ("transfer-duty-calculator", "Bond transfer duty calculator", "SARS transfer duty on a property purchase", ("13%", False)),
     ("word-hints", "Daily word game hints", "Spoiler-free Wordle and Wortel clues, every day", ("A?", True)),
+    ("woord-van-die-dag", "Woord van die Dag", "One Afrikaans word a day, explained in English", ("Aa", True)),
     ("wordle", "Wordle hint today", "Gentle clues first, the answer only if you want it", ("W?", False)),
     ("wortel", "Wortel-wenk vandag", "Sagte leidrade eers, die antwoord net as jy wil", ("W?", True)),
 ]

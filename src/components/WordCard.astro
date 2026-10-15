@@ -1,0 +1,18 @@
+---
+// One Afrikaans word of the day, shown as flipping letter tiles with its meaning and an example.
+import { datum, dateEn } from "../lib/woorde.js";
+const { w, heading = "h2" } = Astro.props;
+const H = heading;
+---
+<article class="woord" lang="af">
+  <p class="woord-date"><time datetime={w.date}>{datum(w.date)}</time> <span lang="en-ZA">· {dateEn(w.date)}</span></p>
+  <H class="woord-tiles" aria-label={w.word}>
+    {[...w.word].map((ch, i) => <span class="t" aria-hidden="true" style={`--i:${i}`}>{ch}</span>)}
+  </H>
+  <p class="woord-type">{w.type_af} <span lang="en-ZA">({w.type_en})</span></p>
+  <dl class="woord-body" lang="en-ZA">
+    <div><dt>Meaning</dt><dd>{w.meaning}</dd></div>
+    <div><dt>Example</dt><dd><span lang="af" class="af">“{w.example_af}”</span><span class="en">{w.example_en}</span></dd></div>
+    {w.note && <div><dt>Good to know</dt><dd>{w.note}</dd></div>}
+  </dl>
+</article>

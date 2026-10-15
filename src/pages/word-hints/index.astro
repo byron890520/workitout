@@ -3,15 +3,17 @@ import Base from "../../layouts/Base.astro";
 import Keypad from "../../components/Keypad.astro";
 import { GAMES, publishedHints, niceDate } from "../../lib/hints.js";
 import { CONFIG, BASE, DEMO } from "../../lib/site.js";
+import { publishedWords } from "../../lib/woorde.js";
 
 const hints = publishedHints();
-const items = Object.entries(GAMES).map(([key, g]) => {
+const items = Object.entries(GAMES).flatMap(([key, g]) => {
   const latest = hints.find((h) => h.game === key);
-  return latest
-    ? { href: `/word-hints/${g.todaySlug}/`, title: `${g.name} hint #${latest.number}`, desc: `${niceDate(latest.date, key)} – spoiler-free clues`,
-        glyph: g.name[0] + "?", alt: key === "wortel", badge: "Today" }
-    : { title: `${g.name} hints`, desc: "Coming soon.", glyph: g.name[0] + "?", alt: true };
+  if (latest) return [{ href: `/word-hints/${g.todaySlug}/`, title: `${g.name} hint #${latest.number}`, desc: `${niceDate(latest.date, key)} – spoiler-free clues`,
+    glyph: g.name[0] + "?", alt: key === "wortel", badge: "Today" }];
+  return key === "wordle" ? [{ title: "Wordle hints", desc: "Coming soon.", glyph: "W?", alt: false }] : [];
 });
+const woord = publishedWords()[0];
+if (woord) items.push({ href: "/woord-van-die-dag/", title: `Woord van die Dag: ${woord.word}`, desc: "Today's Afrikaans word, explained in English", glyph: "Aa", alt: true, badge: "Today" });
 ---
 <Base title="Daily Word Game Hints – Wordle Hint Today & Wortel Wenk"
   description="Spoiler-free hints for today's Wordle and Wortel. Get vowels, first letter and a clue before revealing the answer."
@@ -22,7 +24,7 @@ const items = Object.entries(GAMES).map(([key, g]) => {
   {DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
   <h2>How our hints work</h2>
   <p>Every day we post a set of hints that get gradually stronger: the number of vowels, whether any letters repeat, the first and last letters, and a meaning clue. The answer is always hidden behind a final tap, so you can keep your streak honest.</p>
-  <p>Wortel is the Afrikaans version of the daily five-letter word game, and our Wortel hints are written in Afrikaans.</p>
+  <p>Learning Afrikaans? Our <a href="/woord-van-die-dag/">Woord van die Dag</a> explains one Afrikaans word every morning, with an example sentence in both languages.</p>
   <h2>Archive</h2>
   <ul>
     {hints.length ? hints.slice(0, 60).map((h) => (

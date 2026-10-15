@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "build:demo": "DEMO=1 astro build",
     "add-hint": "node scripts/add-hint.mjs",
+    "add-word": "node scripts/add-word.mjs",
     "test": "node scripts/test-calc.mjs"
   },
   "dependencies": {

@@ -338,3 +338,21 @@ header.site .wrap{justify-content:space-between}
 .chart .tip span{display:flex;align-items:center;gap:6px}
 .table-view{margin-top:16px}
 @media(max-width:520px){.chart{height:210px;margin-left:44px}}
+
+/* Woord van die Dag */
+.woord{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(20px,4vw,32px);box-shadow:0 4px 0 var(--line);margin-top:4px}
+.woord-date{margin:0 0 14px;color:var(--muted);font-size:.9rem}
+.woord-tiles{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;perspective:700px}
+.woord-tiles .t{display:grid;place-items:center;width:clamp(40px,11vw,62px);aspect-ratio:1;border-radius:12px;font:800 clamp(1.4rem,5vw,2.1rem)/1 var(--display);text-transform:uppercase;background:var(--marigold);color:var(--on-marigold);box-shadow:0 5px 0 var(--marigold-deep);animation:answer-flip .6s var(--ease-spring) both;animation-delay:calc(.15s + var(--i) * 90ms)}
+.woord-type{margin:0 0 18px;font-style:italic;color:var(--muted)}
+.woord-body{display:grid;gap:14px;margin:0}
+.woord-body div{display:grid;gap:2px}
+.woord-body dt{font-weight:700;font-size:.85rem;color:var(--fynbos)}
+.woord-body dd{margin:0;font-size:1.05rem}
+.woord-body .af{display:block;font-family:var(--display);font-weight:700;font-size:1.15rem}
+.woord-body .en{display:block;color:var(--muted)}
+.woord-list{padding-left:1.1em}
+.woord-list li{margin:4px 0}
+.woord-list span,.woord-list time{color:var(--muted)}
+.woord-list time{font-size:.85rem;margin-left:4px}
+.woord-nav{display:flex;justify-content:space-between;gap:12px;margin:20px 0;flex-wrap:wrap}
