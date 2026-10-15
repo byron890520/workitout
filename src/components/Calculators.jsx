@@ -130,7 +130,7 @@ export function CompoundCalc() {
                 <option value="12">Monthly</option><option value="4">Quarterly</option><option value="1">Yearly</option>
               </select>
             </Field>
-            <Field id="c-esc" label="Raise top-up each year (%)">
+            <Field id="c-esc" label="Yearly raise (%)">
               <input id="c-esc" {...n} max="30" step="1" value={s.esc} onChange={set("esc")} />
             </Field>
           </div>
