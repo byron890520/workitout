@@ -1,0 +1,24 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { ElectricityCalc } from "../components/Calculators.jsx";
+import { toolSchema, todaySA } from "../lib/site.js";
+
+const faqs = [
+  ["How many units do I get for R100 of electricity?", "At about R2.71 per kWh (Eskom Homelight 20A), R100 buys around 37 units. On a municipal tariff near R3.40 per kWh you'd get around 29 units."],
+  ["Why do I get fewer units later in the month?", "Many municipalities use inclining block tariffs. Once your monthly purchases pass a set number of kWh, the price per unit goes up for the rest of the month."],
+  ["What uses the most electricity at home?", "Anything that heats: geysers, heaters, kettles, ovens and tumble dryers. A geyser is often the single biggest cost in a household."],
+];
+---
+<Base title="Prepaid Electricity Calculator SA – Units & Appliance Costs"
+  description="How many units will you get? Free prepaid electricity calculator for Eskom and municipal tariffs, plus the running cost of geysers, kettles, heaters and more."
+  h1="Prepaid electricity calculator" lede="See how many units your money buys and what each appliance really costs to run."
+  trail={[["Home", "/"], ["Electricity calculator", "/electricity-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Prepaid Electricity Calculator", "/electricity-calculator/", "Prepaid units and appliance running cost calculator.", "UtilitiesApplication")}>
+  <ElectricityCalc client:load />
+  <h2>How prepaid electricity units are calculated</h2>
+  <p>One prepaid unit is one kilowatt-hour (kWh). Divide the rand amount you spend by your price per kWh to get your units. At R2.71 per kWh, R500 buys about 184 units.</p>
+  <p>To work out what an appliance costs, multiply its wattage by the hours you use it and divide by 1 000 to get kWh, then multiply by your rate. A 3 000 W geyser running for two hours uses 6 kWh a day.</p>
+  <p class="notice">Preset rates are approximate 2026/27 figures including VAT. Eskom direct tariffs change every April and municipal tariffs every July. Many municipalities use block tariffs, where the price per unit rises once you've bought a certain amount in a month, and some add a fixed monthly charge. The calculator doesn't include either.</p>
+  <Related exclude="electricity-calculator" />
+</Base>

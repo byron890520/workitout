@@ -1,0 +1,100 @@
+---
+// First-visit intro for the home page (about 3 seconds).
+// Rendered hidden; a tiny inline script shows it only for a person's first visit,
+// never for search engines, and never when the device asks for reduced motion.
+const rows = ["WORK", "IT", "OUT"];
+let i = 0;
+---
+<div id="intro" class="intro" hidden aria-hidden="true">
+  <div class="intro-stage">
+    <div class="intro-board">
+      {rows.map((row) => (
+        <div class="intro-row">
+          {[...row].map((ch) => <span class="intro-tile" style={`--i:${i++}`}>{ch}</span>)}
+        </div>
+      ))}
+    </div>
+    <div class="intro-ops">
+      <span style="--j:0">+</span><span style="--j:1">%</span><span style="--j:2">=</span>
+    </div>
+    <p class="intro-line">South Africa's sums, worked out.</p>
+  </div>
+  <div class="intro-bar"><span></span></div>
+  <button type="button" class="intro-skip" tabindex="-1">Skip intro</button>
+</div>
+<script is:inline>
+(function () {
+  var el = document.getElementById("intro");
+  if (!el) return;
+  var bot = /bot|crawl|spider|slurp|lighthouse|preview|facebookexternalhit|whatsapp/i.test(navigator.userAgent) || navigator.webdriver;
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var seen = false;
+  try { seen = !!localStorage.getItem("wio-intro"); localStorage.setItem("wio-intro", "1"); } catch (e) { seen = true; }
+  var replay = location.hash === "#intro";
+  if (!replay && (bot || calm || seen || location.search)) { el.remove(); return; }
+  el.hidden = false;
+  el.removeAttribute("aria-hidden");
+  document.documentElement.classList.add("intro-on");
+  var done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    el.classList.add("out");
+    document.documentElement.classList.remove("intro-on");
+    setTimeout(function () { el.remove(); }, 650);
+  }
+  var btn = el.querySelector(".intro-skip");
+  btn.tabIndex = 0;
+  btn.addEventListener("click", finish);
+  el.addEventListener("click", finish);
+  addEventListener("keydown", function (e) { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") finish(); }, { once: true });
+  setTimeout(finish, 2900);
+})();
+</script>
+<style is:global>
+  html.intro-on { overflow: hidden; }
+  .intro {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; cursor: pointer;
+    background-color: var(--panel); color: var(--on-panel);
+    background-image: linear-gradient(var(--panel-line) 1px, transparent 1px), linear-gradient(90deg, var(--panel-line) 1px, transparent 1px);
+    background-size: 28px 28px; background-position: center;
+    padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(16px, env(safe-area-inset-left, 0px));
+    clip-path: inset(0 0 0 0); transition: clip-path .6s cubic-bezier(.7,0,.2,1);
+  }
+  .intro.out { clip-path: inset(0 0 100% 0); }
+  .intro.out .intro-stage { transform: translateY(-40px) scale(.96); opacity: 0; }
+  .intro-stage { display: grid; justify-items: center; gap: 22px; perspective: 900px; transition: transform .5s ease, opacity .4s ease; }
+  .intro-board { display: grid; gap: 10px; justify-items: center; transform: rotateX(14deg); transform-style: preserve-3d; }
+  .intro-row { display: flex; gap: 10px; }
+  .intro-tile {
+    display: grid; place-items: center; width: clamp(54px, 15vw, 84px); aspect-ratio: 1; border-radius: 14px;
+    font: 800 clamp(1.8rem, 6vw, 2.8rem)/1 var(--display); color: var(--on-fynbos);
+    background: var(--fynbos); box-shadow: 0 7px 0 var(--fynbos-deep), 0 22px 30px -14px rgba(0,0,0,.6);
+    animation: intro-drop .55s cubic-bezier(.34,1.56,.64,1) both, intro-flip .6s cubic-bezier(.34,1.56,.64,1) forwards;
+    animation-delay: calc(.15s + var(--i) * 70ms), calc(.75s + var(--i) * 85ms);
+  }
+  @keyframes intro-drop { from { opacity: 0; transform: translateY(-120px) rotate(-8deg); } }
+  @keyframes intro-flip {
+    0% { transform: rotateX(0); }
+    50% { transform: rotateX(90deg); background: var(--marigold); color: var(--on-marigold); }
+    100% { transform: rotateX(0); background: var(--marigold); color: var(--on-marigold); box-shadow: 0 7px 0 var(--marigold-deep), 0 22px 30px -14px rgba(0,0,0,.6); }
+  }
+  .intro-ops { display: flex; gap: 10px; }
+  .intro-ops span {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
+    font: 800 1.3rem/1 var(--display); background: var(--surface); color: var(--ink); box-shadow: 0 5px 0 var(--line-deep);
+    animation: intro-pop .45s cubic-bezier(.34,1.56,.64,1) both; animation-delay: calc(1.75s + var(--j) * 90ms);
+  }
+  @keyframes intro-pop { from { opacity: 0; transform: scale(.3) rotate(-20deg); } }
+  .intro-line { margin: 0; font: 700 clamp(1.05rem, 3.6vw, 1.35rem)/1.3 var(--display); letter-spacing: -.01em; text-align: center; animation: intro-fade .5s ease both; animation-delay: 2s; }
+  @keyframes intro-fade { from { opacity: 0; transform: translateY(8px); } }
+  .intro-bar { position: absolute; left: 50%; bottom: calc(36px + env(safe-area-inset-bottom, 0px)); width: min(220px, 50vw); height: 4px; border-radius: 99px; background: var(--panel-line); transform: translateX(-50%); overflow: hidden; }
+  .intro-bar span { display: block; height: 100%; background: var(--marigold); transform-origin: left; animation: intro-progress 2.8s linear both; }
+  @keyframes intro-progress { from { transform: scaleX(0); } }
+  .intro-skip {
+    position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(16px + env(safe-area-inset-top, 0px));
+    font: 600 .9rem/1 var(--body); color: var(--on-panel); background: transparent; border: 1px solid var(--panel-line);
+    border-radius: 99px; padding: 9px 14px; cursor: pointer; opacity: .85;
+  }
+  .intro-skip:hover { opacity: 1; border-color: var(--on-panel); }
+</style>

@@ -1,0 +1,9 @@
+---
+import Keypad from "./Keypad.astro";
+import { TOOLS, DEMO } from "../lib/site.js";
+const { exclude } = Astro.props;
+const items = TOOLS.filter((t) => t.slug !== exclude).map((t) => ({ href: `/${t.slug}/`, ...t }));
+---
+{DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
+<h2>More free tools</h2>
+<Keypad items={items} />

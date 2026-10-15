@@ -1,0 +1,33 @@
+---
+import Base from "../../layouts/Base.astro";
+import Keypad from "../../components/Keypad.astro";
+import { GAMES, publishedHints, niceDate } from "../../lib/hints.js";
+import { CONFIG, BASE, DEMO } from "../../lib/site.js";
+
+const hints = publishedHints();
+const items = Object.entries(GAMES).map(([key, g]) => {
+  const latest = hints.find((h) => h.game === key);
+  return latest
+    ? { href: `/word-hints/${g.todaySlug}/`, title: `${g.name} hint #${latest.number}`, desc: `${niceDate(latest.date, key)} – spoiler-free clues`,
+        glyph: g.name[0] + "?", alt: key === "wortel", badge: "Today" }
+    : { title: `${g.name} hints`, desc: "Coming soon.", glyph: g.name[0] + "?", alt: true };
+});
+---
+<Base title="Daily Word Game Hints – Wordle Hint Today & Wortel Wenk"
+  description="Spoiler-free hints for today's Wordle and Wortel. Get vowels, first letter and a clue before revealing the answer."
+  h1="Daily word game hints" lede="Gentle clues first, the answer only if you want it."
+  trail={[["Home", "/"], ["Word hints", "/word-hints/"]]}
+  schema={{ "@type": "CollectionPage", name: "Daily word game hints", url: BASE + "/word-hints/" }}>
+  <Keypad items={items} />
+  {DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
+  <h2>How our hints work</h2>
+  <p>Every day we post a set of hints that get gradually stronger: the number of vowels, whether any letters repeat, the first and last letters, and a meaning clue. The answer is always hidden behind a final tap, so you can keep your streak honest.</p>
+  <p>Wortel is the Afrikaans version of the daily five-letter word game, and our Wortel hints are written in Afrikaans.</p>
+  <h2>Archive</h2>
+  <ul>
+    {hints.length ? hints.slice(0, 60).map((h) => (
+      <li><a href={`/word-hints/${GAMES[h.game].datedSlug(h.date)}/`}>{GAMES[h.game].name} #{h.number} – {niceDate(h.date)}</a></li>
+    )) : <li>The archive fills up as daily hints are published.</li>}
+  </ul>
+  <p class="hint">Wordle is a trademark of The New York Times Company. {CONFIG.brand} is independent and not affiliated with The New York Times or the makers of Wortel.</p>
+</Base>

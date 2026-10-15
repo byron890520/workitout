@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { VatCalc } from "../components/Calculators.jsx";
+import { toolSchema, todaySA } from "../lib/site.js";
+
+const faqs = [
+  ["What is the VAT rate in South Africa?", "The standard VAT rate is 15%. Some items, such as certain basic foods and exports, are zero-rated, and some services are exempt."],
+  ["How do I remove VAT from a price?", "Divide the VAT-inclusive price by 1.15. To get only the VAT amount, multiply the inclusive price by 15/115."],
+  ["When must a business register for VAT?", "Registration becomes compulsory once taxable turnover passes the SARS threshold in a 12-month period. Check the current threshold on the SARS website before deciding."],
+];
+---
+<Base title="VAT Calculator South Africa (15%) – Add or Remove VAT"
+  description="Free 15% VAT calculator for South Africa. Add VAT to a price or remove VAT from an inclusive amount instantly, with the formulas explained."
+  h1="VAT calculator (15%)" lede="Add or remove South African VAT from any amount."
+  trail={[["Home", "/"], ["VAT calculator", "/vat-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("VAT Calculator", "/vat-calculator/", "Add or remove 15% South African VAT.")}>
+  <VatCalc client:load />
+  <h2>How to calculate VAT in South Africa</h2>
+  <p>The standard VAT rate in South Africa is 15%.</p>
+  <ul>
+    <li><strong>Add VAT:</strong> multiply the VAT-exclusive price by 1.15. R1 000 × 1.15 = R1 150.</li>
+    <li><strong>Remove VAT:</strong> divide the VAT-inclusive price by 1.15. R1 150 ÷ 1.15 = R1 000.</li>
+    <li><strong>VAT portion of an inclusive price:</strong> multiply by 15 and divide by 115.</li>
+  </ul>
+  <p>A common mistake is subtracting 15% from an inclusive price. That gives R977.50 instead of R1 000, because the 15% was added to the smaller, exclusive amount.</p>
+  <Related exclude="vat-calculator" />
+</Base>

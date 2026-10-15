@@ -1,0 +1,21 @@
+---
+// A grid of tools shown as calculator keys. items: { href?, title, desc, glyph, alt, badge? }
+const { items } = Astro.props;
+---
+<ul class="keypad">
+  {items.map((it, i) => {
+    const Tag = it.href ? "a" : "div";
+    return (
+      <li style={`--n:${i}`}>
+        <Tag href={it.href}>
+          <span class={`key ${it.alt ? "alt" : ""}`} aria-hidden="true">{it.glyph}</span>
+          <span>
+            {it.badge && <span class="today">{it.badge}</span>}
+            <strong>{it.title}</strong>
+            <span class="d">{it.desc}</span>
+          </span>
+        </Tag>
+      </li>
+    );
+  })}
+</ul>

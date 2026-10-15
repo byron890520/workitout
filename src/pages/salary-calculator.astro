@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { SalaryCalc } from "../components/Calculators.jsx";
+import { RATES, money } from "../lib/calc.js";
+import { toolSchema, todaySA } from "../lib/site.js";
+
+const ty = RATES.taxYear;
+const b = RATES.brackets;
+const r = RATES.rebates;
+const m = RATES.medCredit;
+const threshold = money(r.primary / b[0][2]);
+const rows = b.map(([lo, base, rate], i) => {
+  const next = b[i + 1];
+  const range = next ? `${money(lo ? lo + 1 : 1)} – ${money(next[0])}` : `${money(lo + 1)} and above`;
+  const tax = base ? `${money(base)} + ${Math.round(rate * 100)}% of the amount above ${money(lo)}` : `${Math.round(rate * 100)}% of taxable income`;
+  return [range, tax];
+});
+const faqs = [
+  ["How much tax do I pay on R30 000 a month?", "If you're under 65 with no medical aid or retirement contributions, PAYE on R30 000 a month is about R4 681, and UIF is R177.12, leaving roughly R25 142 take-home. Enter your own figures above for an exact estimate."],
+  ["What is the tax-free threshold in South Africa?", `For the ${ty} tax year you pay no income tax on income up to ${threshold} a year if you're under 65, because the primary rebate cancels out the tax on that amount.`],
+  ["Why is my payslip different from this calculator?", "Payroll systems handle bonuses, travel allowances, fringe benefits and mid-year salary changes differently. This calculator assumes the same salary every month for a full tax year."],
+  ["Does a raise push all my income into a higher bracket?", "No. South Africa uses marginal tax brackets, so only the portion of income above each threshold is taxed at the higher rate."],
+];
+---
+<Base title={`Salary After Tax Calculator South Africa ${ty} | Take-Home Pay`}
+  description={`Free SARS ${ty} salary calculator. See your take-home pay after PAYE, UIF, medical aid tax credits and pension contributions.`}
+  h1={`Salary after tax calculator (${ty})`}
+  lede="Enter your monthly salary to see exactly what lands in your bank account after PAYE and UIF."
+  trail={[["Home", "/"], ["Salary calculator", "/salary-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Salary After Tax Calculator", "/salary-calculator/", "South African take-home pay calculator using SARS tax tables.")}>
+  <SalaryCalc client:load />
+  <noscript><p class="notice">Turn on JavaScript to use the calculator. The tax tables below still apply.</p></noscript>
+  <h2>How your take-home pay is worked out</h2>
+  <p>Your employer deducts PAYE (pay-as-you-earn income tax) and UIF from your gross salary each month. This calculator annualises your salary, subtracts tax-deductible retirement contributions (up to 27.5% of income, capped at {money(RATES.retirementCapAmount)} a year), applies the SARS {ty} tax tables, then subtracts your rebates and medical scheme tax credits.</p>
+  <h3>SARS income tax brackets {ty} (1 March 2026 – 28 February 2027)</h3>
+  <div class="table-scroll"><table><thead><tr><th>Taxable income per year</th><th>Tax</th></tr></thead>
+    <tbody>{rows.map(([a, c]) => <tr><td>{a}</td><td>{c}</td></tr>)}</tbody></table></div>
+  <h3>Rebates and medical tax credits</h3>
+  <p>Everyone gets a primary rebate of {money(r.primary)} a year, which means you pay no income tax below about {threshold} a year if you're under 65. People 65 and older get an extra {money(r.secondary)}, and people 75 and older a further {money(r.tertiary)}. Medical aid members get a tax credit of R{m.first} a month for themselves, R{m.second} for the first dependant and R{m.additional} for each additional dependant.</p>
+  <h3>UIF</h3>
+  <p>UIF is 1% of your salary, capped at R{(RATES.uifCeiling * RATES.uifRate).toFixed(2)} a month because contributions only apply up to {money(RATES.uifCeiling)} of monthly pay.</p>
+  <Related exclude="salary-calculator" />
+</Base>

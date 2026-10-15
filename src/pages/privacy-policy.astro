@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import { CONFIG, todaySA } from "../lib/site.js";
+const email = CONFIG.contact_email;
+---
+<Base title={`Privacy Policy | ${CONFIG.brand}`} description={`How ${CONFIG.brand} handles your information, cookies and advertising.`}
+  h1="Privacy policy" trail={[["Home", "/"], ["Privacy policy", "/privacy-policy/"]]} glyph={null} updated={todaySA()}>
+  <h2>What we collect</h2>
+  <p>Our calculators run in your browser. The numbers you type are not sent to us or stored by us. If you share a result, your numbers are placed in the link you send, so anyone with that link can see them.</p>
+  <h2>Cookies and advertising</h2>
+  <p>We use Google AdSense to show ads. Google and its partners use cookies to serve ads based on your previous visits to this and other websites. You can opt out of personalised advertising in <a href="https://adssettings.google.com" rel="nofollow">Google Ads Settings</a>. Learn more about <a href="https://policies.google.com/technologies/ads" rel="nofollow">how Google uses information from sites that use its services</a>.</p>
+  <h2>Analytics</h2>
+  <p>We may use privacy-friendly analytics to count page views. These don't identify you personally.</p>
+  <h2>Your rights (POPIA)</h2>
+  <p>Under the Protection of Personal Information Act you can ask what personal information we hold about you and ask us to correct or delete it. Contact <a href={`mailto:${email}`}>{email}</a>.</p>
+  <h2>Changes</h2>
+  <p>We'll post any changes to this policy on this page.</p>
+</Base>

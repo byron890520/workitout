@@ -1,0 +1,34 @@
+---
+// One page per published hint, plus a "today" page per game that always shows the latest.
+import Base from "../../layouts/Base.astro";
+import HintBody from "../../components/HintBody.astro";
+import { GAMES, publishedHints, niceDate } from "../../lib/hints.js";
+import { CONFIG, BASE } from "../../lib/site.js";
+
+export function getStaticPaths() {
+  const hints = publishedHints();
+  const paths = [];
+  for (const [key, g] of Object.entries(GAMES)) {
+    const items = hints.filter((h) => h.game === key);
+    items.forEach((h, i) => {
+      paths.push({ params: { slug: g.datedSlug(h.date) }, props: { hint: h, recent: items.filter((x) => x !== h), today: false } });
+      if (i === 0) paths.push({ params: { slug: g.todaySlug }, props: { hint: h, recent: items.slice(1), today: true } });
+    });
+  }
+  return paths;
+}
+
+const { hint, recent, today } = Astro.props;
+const g = GAMES[hint.game];
+const d = niceDate(hint.date, hint.game);
+const title = today ? g.titleToday(d, hint.number) : g.titleDated(d, hint.number);
+const path = Astro.url.pathname;
+---
+<Base title={title} description={g.desc(d, hint.number)} h1={g.L.h1(d)} lang={g.lang} updated={hint.date}
+  glyph={{ glyph: g.name[0] + "?", alt: hint.game === "wortel" }}
+  trail={[["Home", "/"], ["Word hints", "/word-hints/"], [today ? `${g.name} today` : `${g.name} ${d}`, path]]}
+  schema={{ "@type": "Article", headline: title, datePublished: hint.date, dateModified: hint.date, inLanguage: g.lang,
+    author: { "@type": "Organization", name: CONFIG.brand }, publisher: { "@type": "Organization", name: CONFIG.brand },
+    mainEntityOfPage: BASE + path }}>
+  <HintBody hint={hint} recent={recent} />
+</Base>

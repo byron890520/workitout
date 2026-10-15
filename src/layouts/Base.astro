@@ -1,0 +1,126 @@
+---
+import "@fontsource-variable/bricolage-grotesque/opsz.css";
+import "@fontsource/atkinson-hyperlegible/latin-400.css";
+import "@fontsource/atkinson-hyperlegible/latin-700.css";
+import "../styles/global.css";
+import ToolsMenu from "../components/ToolsMenu.jsx";
+import { CONFIG, DEMO, BASE, TOOLS, glyphFor } from "../lib/site.js";
+
+const {
+  title, description, h1, lede = "", trail = [], faqs = [], schema = null, lang = "en-ZA",
+  updated = null, noindex = false, glyph = undefined,
+} = Astro.props;
+
+const path = Astro.url.pathname;
+const url = BASE + path;
+const key = glyph === undefined ? glyphFor(path) : glyph;
+const robots = noindex || DEMO ? "noindex,follow" : "index,follow,max-image-preview:large";
+const hasHero = Astro.slots.has("hero");
+// Share image for this page (made by scripts/make-og.py).
+const ogName = path === "/" ? "home"
+  : path.startsWith("/word-hints/wordle") ? "wordle"
+  : path.startsWith("/word-hints/wortel") ? "wortel"
+  : (path.split("/")[1] || "home");
+const ogKnown = ["home", "salary-calculator", "vat-calculator", "aps-calculator", "electricity-calculator", "transfer-duty-calculator", "word-hints", "wordle", "wortel"];
+const ogImage = `${BASE}/og/${ogKnown.includes(ogName) ? ogName : "home"}.png`;
+
+const crumbsLd = trail.length > 1 ? {
+  "@type": "BreadcrumbList",
+  itemListElement: trail.map(([name, p], i) => ({ "@type": "ListItem", position: i + 1, name, item: BASE + p })),
+} : null;
+const faqLd = faqs.length ? {
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+} : null;
+const graph = [schema, crumbsLd, faqLd].filter(Boolean);
+const ld = graph.length ? JSON.stringify({ "@context": "https://schema.org", "@graph": graph }) : "";
+
+const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc: t.desc, glyph: t.glyph, alt: t.alt }));
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+<meta charset="utf-8">
+<script is:inline>document.documentElement.classList.add("js")</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={url}>
+<meta name="robots" content={robots}>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content={CONFIG.brand}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={url}>
+<meta property="og:locale" content={CONFIG.locale}>
+<meta property="og:image" content={ogImage}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={title}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content={ogImage}>
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="theme-color" content="#1d5a45">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{CONFIG.google_site_verification && <meta name="google-site-verification" content={CONFIG.google_site_verification}>}
+{CONFIG.adsense_client && !DEMO && <meta name="google-adsense-account" content={CONFIG.adsense_client}>}
+{CONFIG.adsense_client && !DEMO && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsense_client}`} crossorigin="anonymous"></script>}
+{ld && <script type="application/ld+json" set:html={ld}></script>}
+</head>
+<body>
+<slot name="intro" />
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+  <a class="logo" href="/"><span class="mark" aria-hidden="true">W</span>{CONFIG.brand}</a>
+  <ToolsMenu client:load items={menuItems} current={path} />
+</div></header>
+<main id="main">
+  {hasHero ? <slot name="hero" /> : (
+    <section class="page-head paper-band"><div class="wrap">
+      {key && <span class={`key ${key.alt ? "alt" : ""}`} aria-hidden="true">{key.glyph}</span>}
+      <div>
+        {trail.length > 1 && (
+          <nav class="crumbs" aria-label="Breadcrumb"><ol>
+            {trail.map(([name, p], i) => i < trail.length - 1 ? <li><a href={p}>{name}</a></li> : <li aria-current="page">{name}</li>)}
+          </ol></nav>
+        )}
+        <h1>{h1}</h1>
+        {lede && <p class="lede">{lede}</p>}
+      </div>
+    </div></section>
+  )}
+  <div class="wrap content">
+    {DEMO && <p class="notice"><strong>Preview build:</strong> sample hint data shown. Do not deploy this build.</p>}
+    <slot />
+    {faqs.length > 0 && (
+      <section class="faq"><h2>Frequently asked questions</h2>
+        {faqs.map(([q, a]) => <><h3>{q}</h3><p>{a}</p></>)}
+      </section>
+    )}
+    {updated && <p class="updated">Last checked: <time datetime={updated}>{updated}</time></p>}
+  </div>
+</main>
+<footer class="site"><div class="wrap">
+  <ul class="foot-tools">{menuItems.map((t) => <li><a href={t.href}>{t.title}</a></li>)}</ul>
+  <ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/terms/">Terms &amp; disclaimer</a></li></ul>
+  <p>&copy; {new Date().getFullYear()} {CONFIG.brand}. Calculators give estimates only and are not financial, tax or legal advice.</p>
+</div></footer>
+<script is:inline>
+// Sections marked data-reveal animate in once, the first time they scroll into view.
+(function () {
+  var els = document.querySelectorAll("[data-reveal]");
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: "0px 0px -28% 0px", threshold: 0.15 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

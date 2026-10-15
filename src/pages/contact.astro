@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro";
+import { CONFIG } from "../lib/site.js";
+const email = CONFIG.contact_email;
+---
+<Base title={`Contact ${CONFIG.brand}`} description={`Get in touch with ${CONFIG.brand}.`} h1="Contact us"
+  trail={[["Home", "/"], ["Contact", "/contact/"]]} glyph={null}>
+  <p>Questions, corrections or partnership ideas? Email <a href={`mailto:${email}`}>{email}</a>. We usually reply within two working days.</p>
+</Base>

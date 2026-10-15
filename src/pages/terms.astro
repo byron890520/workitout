@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro";
+import { CONFIG } from "../lib/site.js";
+---
+<Base title={`Terms & Disclaimer | ${CONFIG.brand}`} description={`Terms of use and disclaimer for ${CONFIG.brand}.`}
+  h1="Terms of use and disclaimer" trail={[["Home", "/"], ["Terms", "/terms/"]]} glyph={null}>
+  <p>Our calculators give estimates for general information only. They are not financial, tax, legal or academic advice. Rates and rules change, and your own circumstances may differ, so confirm important figures with SARS, your employer, your municipality, a conveyancer or the relevant university.</p>
+  <p>We work hard to keep the information accurate but can't guarantee it is complete or current, and we aren't liable for decisions made using these tools.</p>
+  <p>Third-party trademarks, including Wordle, belong to their owners. This site is not affiliated with them.</p>
+</Base>

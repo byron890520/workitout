@@ -1,0 +1,29 @@
+---
+import { GAMES, clues, niceDate } from "../lib/hints.js";
+import { DEMO } from "../lib/site.js";
+const { hint, recent } = Astro.props;
+const g = GAMES[hint.game];
+const L = g.L;
+const c = clues(hint.answer);
+---
+<p>{L.intro}</p>
+<details><summary>{L.vowels}</summary><p>{L.vowelsA(c.vowelCount, c.vowelList)}</p></details>
+<details><summary>{L.repeat}</summary><p>{c.repeats.length ? L.repeatYes(c.repeats.join(", ")) : L.repeatNo}</p></details>
+<details><summary>{L.first}</summary><p>{L.firstA} <strong>{c.first}</strong>.</p></details>
+<details><summary>{L.last}</summary><p>{L.lastA} <strong>{c.last}</strong>.</p></details>
+<details><summary>{L.clue}</summary><p>{hint.clue}</p></details>
+{DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
+<details class="reveal"><summary>{L.answer}</summary>
+  <p>{L.answerA}</p>
+  <p class="answer-tiles" aria-label={hint.answer}>
+    {[...hint.answer].map((ch, i) => <span class="t" aria-hidden="true" style={`--i:${i}`}>{ch}</span>)}
+  </p>
+</details>
+{recent.length > 0 && (
+  <>
+    <h2>{L.recent}</h2>
+    <ul>{recent.slice(0, 10).map((r) => <li><a href={`/word-hints/${g.datedSlug(r.date)}/`}>{g.name} #{r.number} – {niceDate(r.date, hint.game)}</a></li>)}</ul>
+  </>
+)}
+<p class="hint">{L.disclaimer}</p>
+<p><a href="/word-hints/">← {L.back}</a></p>
