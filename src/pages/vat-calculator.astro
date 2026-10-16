@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { VatCalc } from "../components/Calculators.jsx";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 
 const faqs = [
   ["What is the VAT rate in South Africa?", "The standard VAT rate is 15%. Some items, such as certain basic foods and exports, are zero-rated, and some services are exempt."],
@@ -13,7 +13,7 @@ const faqs = [
 <Base title="VAT Calculator South Africa (15%) – Add or Remove VAT Instantly (2026)"
   description="Free 15% VAT calculator for South Africa. Add VAT to a price or remove VAT from an inclusive amount instantly, with the formulas explained."
   h1="VAT calculator (15%)" lede="Add or remove South African VAT from any amount."
-  trail={[["Home", "/"], ["VAT calculator", "/vat-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["VAT calculator", "/vat-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("VAT Calculator", "/vat-calculator/", "Add or remove 15% South African VAT.")}>
   <VatCalc client:load />
   <h2>How to calculate VAT in South Africa</h2>

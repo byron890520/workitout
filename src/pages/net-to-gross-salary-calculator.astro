@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { NetToGrossCalc } from "../components/Calculators.jsx";
 import { RATES, grossFromNet, money } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
 const ex = grossFromNet({ net: 20000 });
 const rows = [10000, 15000, 20000, 25000, 30000, 40000, 50000].map((n) => [n, grossFromNet({ net: n }).gross]);
@@ -17,7 +17,7 @@ const faqs = [
   description={`Free SARS ${yr} net to gross calculator. Enter the take-home pay you want and see the gross salary you need before PAYE and UIF.`}
   h1={`Net to gross salary calculator (${ty})`}
   lede="Know the take-home pay you need? See the gross salary to ask for."
-  trail={[["Home", "/"], ["Net to gross calculator", "/net-to-gross-salary-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Net to gross calculator", "/net-to-gross-salary-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Net to Gross Salary Calculator", "/net-to-gross-salary-calculator/", "Works out the gross salary needed for a target take-home pay in South Africa.")}>
   <NetToGrossCalc client:load />
   <h2>Why this is useful</h2>

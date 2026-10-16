@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { TOOLS, BASE, todaySA } from "../lib/site.js";
+import { TOOLS, BASE } from "../lib/site.js";
 import { EMBEDDABLE, snippet } from "../lib/embed.js";
 const tools = EMBEDDABLE.map((s) => TOOLS.find((t) => t.slug === s));
 const faqs = [
@@ -12,7 +12,7 @@ const faqs = [
 <Base title="Free Calculators for Your Website – SA Tax, Salary & VAT Widgets"
   description="Add a free South African salary, tax refund, VAT, transfer duty or compound interest calculator to your website. Copy one line of code. Always up to date with SARS rates."
   h1="Free calculators for your website" lede="Give your visitors a South African tax, salary or property calculator. Copy, paste, done."
-  trail={[["Home", "/"], ["Calculators for your website", "/free-calculators-for-your-website/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Calculators for your website", "/free-calculators-for-your-website/"]]} faqs={faqs} updated
   schema={{ "@type": "WebPage", name: "Free calculators for your website", url: BASE + "/free-calculators-for-your-website/" }}>
   <p>Accountants, estate agents, bookkeepers, HR teams, bloggers and financial advisers use calculators to help their readers. Ours are free to put on your own site. They fit any width, work on phones, and update automatically when SARS changes the rates.</p>
   <h2>How to add one</h2>

@@ -1,10 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
-import { CONFIG, todaySA } from "../lib/site.js";
+import { CONFIG } from "../lib/site.js";
 const email = CONFIG.contact_email;
 ---
 <Base title={`Privacy Policy | ${CONFIG.brand}`} description={`How ${CONFIG.brand} handles your information, cookies and advertising.`}
-  h1="Privacy policy" trail={[["Home", "/"], ["Privacy policy", "/privacy-policy/"]]} glyph={null} updated={todaySA()}>
+  h1="Privacy policy" trail={[["Home", "/"], ["Privacy policy", "/privacy-policy/"]]} glyph={null} updated>
   <h2>What we collect</h2>
   <p>Our calculators run in your browser. The numbers you type are not sent to us or stored by us. If you share a result, your numbers are placed in the link you send, so anyone with that link can see them.</p>
   <h2>Cookies and advertising</h2>

@@ -1,13 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { ANSWERS, GROUPS } from "../../lib/answers.js";
-import { BASE, todaySA } from "../../lib/site.js";
+import { BASE } from "../../lib/site.js";
 import Related from "../../components/Related.astro";
 ---
 <Base title="South African Tax & Money Answers (2026/27) – PAYE, UIF, VAT, Transfer Duty"
   description="Quick, worked answers to common South African tax and money questions: tax on your salary, the tax threshold, UIF, medical credits, VAT, transfer duty and saving."
   h1="Tax and money answers" lede="Short answers with the working shown, using this year's SARS figures."
-  trail={[["Home", "/"], ["Answers", "/answers/"]]} updated={todaySA()}
+  trail={[["Home", "/"], ["Answers", "/answers/"]]} updated
   schema={{ "@type": "CollectionPage", name: "Tax and money answers", url: BASE + "/answers/",
     hasPart: ANSWERS.map((a) => ({ "@type": "Article", headline: a.q, url: `${BASE}/answers/${a.slug}/` })) }}>
   {GROUPS.map((g) => (

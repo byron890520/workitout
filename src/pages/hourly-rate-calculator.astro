@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { HourlyCalc } from "../components/Calculators.jsx";
 import { RATES, hourly, money } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
 const ex = hourly({ rate: 150 });
 const faqs = [
@@ -15,7 +15,7 @@ const faqs = [
 <Base title={`Hourly Rate to Salary Calculator South Africa ${yr} – Per Month & Year`}
   description={`Convert an hourly rate into weekly, monthly and yearly pay, plus take-home pay after SARS ${ty} PAYE and UIF. Free South African calculator.`}
   h1="Hourly rate to salary calculator" lede="Turn an hourly rate into monthly and yearly pay, before and after tax."
-  trail={[["Home", "/"], ["Hourly rate calculator", "/hourly-rate-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Hourly rate calculator", "/hourly-rate-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Hourly Rate to Salary Calculator", "/hourly-rate-calculator/", "Converts an hourly rate into weekly, monthly and annual pay in South Africa.")}>
   <HourlyCalc client:load />
   <h2>How it's worked out</h2>

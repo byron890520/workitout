@@ -2,18 +2,18 @@
 import Base from "../../layouts/Base.astro";
 import Related from "../../components/Related.astro";
 import { ANSWERS } from "../../lib/answers.js";
-import { BASE, TOOLS, CONFIG, todaySA } from "../../lib/site.js";
+import { BASE, TOOLS, CONFIG, updatedFor } from "../../lib/site.js";
 
 export function getStaticPaths() {
   return ANSWERS.map((a) => ({ params: { slug: a.slug }, props: { a } }));
 }
 const { a } = Astro.props;
 const tool = TOOLS.find((t) => t.slug === a.tool);
-const today = todaySA();
+const today = updatedFor(`/answers/${a.slug}/`);
 const strip = (h) => h.replace(/<[^>]+>/g, "");
 ---
 <Base title={a.title} description={a.desc} h1={a.q}
-  trail={[["Home", "/"], ["Answers", "/answers/"], [a.q, `/answers/${a.slug}/`]]} updated={today}
+  trail={[["Home", "/"], ["Answers", "/answers/"], [a.q, `/answers/${a.slug}/`]]} updated
   schema={{ "@type": "Article", headline: a.q, description: strip(a.desc), url: `${BASE}/answers/${a.slug}/`, inLanguage: "en-ZA",
     dateModified: today, author: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" },
     publisher: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" } }}>

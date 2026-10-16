@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { CompoundCalc } from "../components/Calculators.jsx";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 import { compound, money } from "../lib/calc.js";
 const ex = compound({ start: 10000, monthly: 1000, rate: 9, years: 20 });
 
@@ -16,7 +16,7 @@ const faqs = [
 <Base title="Compound Interest Calculator South Africa (Rand) – Savings & Monthly Contributions"
   description="Free compound interest calculator in rand. See how a lump sum and monthly top-ups grow over time, with a year-by-year chart and table."
   h1="Compound interest calculator" lede="See what your savings could grow to, and how much of it is interest."
-  trail={[["Home", "/"], ["Compound interest calculator", "/compound-interest-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Compound interest calculator", "/compound-interest-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Compound Interest Calculator", "/compound-interest-calculator/", "Savings growth calculator with monthly contributions and compounding.")}>
   <CompoundCalc client:load />
   <h2>How compound interest works</h2>

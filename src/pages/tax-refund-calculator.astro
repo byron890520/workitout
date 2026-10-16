@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { TaxRefundCalc } from "../components/Calculators.jsx";
 import { RATES, taxRefund, money } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
 const ex = taxRefund({ income: 360000, payePaid: 56172, ra: 24000 });
 const faqs = [
@@ -15,7 +15,7 @@ const faqs = [
 <Base title={`SARS Tax Refund Calculator ${yr} (${ty}) – Estimate Your Refund`}
   description={`Free SARS tax refund calculator for ${ty}. Estimate your refund from your IRP5, retirement annuity contributions and medical expenses.`}
   h1={`SARS tax refund calculator (${ty})`} lede="Estimate what SARS will pay back, or what you'll owe, when your return is assessed."
-  trail={[["Home", "/"], ["Tax refund calculator", "/tax-refund-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Tax refund calculator", "/tax-refund-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("SARS Tax Refund Calculator", "/tax-refund-calculator/", "Estimates a South African income tax refund from IRP5 figures and deductions.")}>
   <TaxRefundCalc client:load />
   <h2>How the estimate works</h2>

@@ -1,0 +1,20 @@
+{
+  "_note": "When a page's content really changes, set its date here (YYYY-MM-DD). Used for the sitemap and the 'Last checked' line. Pages not listed use 'default'. Daily hint and word pages use their own dates automatically.",
+  "default": "2026-10-16",
+  "/": "2026-10-16",
+  "/about/": "2026-10-15",
+  "/contact/": "2026-10-15",
+  "/privacy-policy/": "2026-10-15",
+  "/terms/": "2026-10-15",
+  "/answers/": "2026-10-16",
+  "/salary-calculator/": "2026-10-16",
+  "/net-to-gross-salary-calculator/": "2026-10-16",
+  "/hourly-rate-calculator/": "2026-10-16",
+  "/tax-refund-calculator/": "2026-10-16",
+  "/retirement-annuity-calculator/": "2026-10-16",
+  "/vat-calculator/": "2026-10-16",
+  "/compound-interest-calculator/": "2026-10-16",
+  "/electricity-calculator/": "2026-10-16",
+  "/transfer-duty-calculator/": "2026-10-16",
+  "/free-calculators-for-your-website/": "2026-10-16"
+}

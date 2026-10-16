@@ -5,7 +5,7 @@ import "@fontsource/atkinson-hyperlegible/latin-700.css";
 import "../styles/global.css";
 import ToolsMenu from "../components/ToolsMenu.jsx";
 import MathTrail from "../components/MathTrail.astro";
-import { CONFIG, DEMO, BASE, TOOLS, GROUPS, glyphFor } from "../lib/site.js";
+import { CONFIG, DEMO, BASE, TOOLS, GROUPS, glyphFor, updatedFor } from "../lib/site.js";
 
 const {
   title, description, h1, lede = "", trail = [], faqs = [], schema = null, lang = "en-ZA",
@@ -14,6 +14,7 @@ const {
 
 const path = Astro.url.pathname;
 const url = BASE + path;
+const lastChecked = updated === true ? updatedFor(path) : updated;
 const key = glyph === undefined ? glyphFor(path) : glyph;
 const robots = noindex || DEMO ? "noindex,follow" : "index,follow,max-image-preview:large";
 const hasHero = Astro.slots.has("hero");
@@ -99,7 +100,7 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
         {faqs.map(([q, a]) => <><h3>{q}</h3><p>{a}</p></>)}
       </section>
     )}
-    {updated && <p class="updated">Last checked: <time datetime={updated}>{updated}</time></p>}
+    {lastChecked && <p class="updated">Last checked: <time datetime={lastChecked}>{lastChecked}</time></p>}
   </div>
 </main>
 <footer class="site"><div class="wrap">

@@ -59,3 +59,7 @@ npm run build:demo   # preview build with sample hints – never deploy this
 
 - **Late February:** update `src/data/rates.json` from the Budget and run `npm test`.
 - **April and July:** check the electricity preset rates in `src/components/Calculators.jsx`.
+
+## Page dates
+
+`src/data/updated.json` holds the date each page's content last really changed. It feeds the sitemap `lastmod` and the "Last checked" line. When you change a page (or update `rates.json` after a Budget), set that page's date there. Pages not listed use `default`. Daily hint and word pages date themselves.

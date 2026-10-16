@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 
 const read = (f) => JSON.parse(readFileSync(new URL(`./src/data/${f}`, import.meta.url), "utf8"));
 const config = read("config.json");
+const updated = read("updated.json");
 const demo = !!process.env.DEMO;
 
 // "Last updated" dates for the sitemap, so Google re-crawls pages that changed.
@@ -34,7 +35,7 @@ export default defineConfig({
       filter: (page) => !page.includes("/404") && !page.includes("/embed/"),
       serialize(item) {
         const path = new URL(item.url).pathname;
-        const date = lastmod.get(path) || today;
+        const date = lastmod.get(path) || updated[path] || updated.default;
         const daily = path.includes("-today/") || path.includes("-vandag/") || path === "/word-hints/" || path === "/woord-van-die-dag/";
         return { ...item, lastmod: date, changefreq: daily ? "daily" : "monthly",
           priority: path === "/" ? 1.0 : daily || path.endsWith("-calculator/") ? 0.9 : path.startsWith("/answers/") ? 0.7 : 0.5 };

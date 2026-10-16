@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { TransferDutyCalc } from "../components/Calculators.jsx";
 import { RATES, money, transferDuty } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 
 const t = RATES.transferDuty;
 const rows = t.map(([lo, base, rate], i) => {
@@ -24,7 +24,7 @@ const faqs = [
 <Base title={`Bond Transfer Duty Calculator South Africa ${yr} (${ty}) | SARS Rates`}
   description={`Calculate bond transfer duty on a property purchase in seconds using the ${ty} rates. No duty on homes up to R1.21 million.`}
   h1="Bond transfer duty calculator" lede="Work out the SARS transfer duty on a home or property purchase."
-  trail={[["Home", "/"], ["Bond transfer duty calculator", "/transfer-duty-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Bond transfer duty calculator", "/transfer-duty-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Bond Transfer Duty Calculator", "/transfer-duty-calculator/", "SARS transfer duty calculator.")}>
   <TransferDutyCalc client:load />
   <h2>Transfer duty rates ({ty})</h2>

@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { SalaryCalc } from "../components/Calculators.jsx";
 import { RATES, money, salary } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 
 const ty = RATES.taxYear;
 const yr = "20" + ty.split("/")[1];
@@ -29,7 +29,7 @@ const faqs = [
   description={`Free SARS income tax calculator for the ${yr} tax year (${ty}). See your take-home pay after PAYE, UIF, medical aid tax credits and pension contributions.`}
   h1={`Salary after tax calculator (${ty})`}
   lede="Enter your monthly salary to see exactly what lands in your bank account after PAYE and UIF."
-  trail={[["Home", "/"], ["Salary calculator", "/salary-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Salary calculator", "/salary-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Salary After Tax Calculator", "/salary-calculator/", "South African take-home pay calculator using SARS tax tables.")}>
   <SalaryCalc client:load />
   <noscript><p class="notice">Turn on JavaScript to use the calculator. The tax tables below still apply.</p></noscript>

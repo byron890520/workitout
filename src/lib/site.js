@@ -1,4 +1,5 @@
 import CONFIG from "../data/config.json" with { type: "json" };
+import UPDATED from "../data/updated.json" with { type: "json" };
 
 export { CONFIG };
 export const DEMO = !!process.env.DEMO;
@@ -8,6 +9,9 @@ export const BASE = CONFIG.domain.replace(/\/$/, "");
 export function todaySA() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: CONFIG.timezone || "Africa/Johannesburg" }).format(new Date());
 }
+
+/** The date a page's content last really changed (src/data/updated.json), not the build date. */
+export const updatedFor = (path) => UPDATED[path] || UPDATED.default;
 
 export const TOOLS = [
   { slug: "salary-calculator", group: "pay", nav: "Salary", title: "Salary After Tax Calculator", glyph: "R", alt: false,

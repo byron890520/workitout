@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { ElectricityCalc } from "../components/Calculators.jsx";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 
 const faqs = [
   ["How many units do I get for R100 of electricity?", "At about R2.71 per kWh (Eskom Homelight 20A), R100 buys around 37 units. On a municipal tariff near R3.40 per kWh you'd get around 29 units."],
@@ -13,7 +13,7 @@ const faqs = [
 <Base title="Prepaid Electricity Calculator South Africa 2026 – Units Per Rand & Appliance Costs"
   description="How many units will you get? Free prepaid electricity calculator for Eskom and municipal tariffs, plus the running cost of geysers, kettles, heaters and more."
   h1="Prepaid electricity calculator" lede="See how many units your money buys and what each appliance really costs to run."
-  trail={[["Home", "/"], ["Electricity calculator", "/electricity-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Electricity calculator", "/electricity-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Prepaid Electricity Calculator", "/electricity-calculator/", "Prepaid units and appliance running cost calculator.", "UtilitiesApplication")}>
   <ElectricityCalc client:load />
   <h2>How prepaid electricity units are calculated</h2>

@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { RetirementCalc } from "../components/Calculators.jsx";
 import { RATES, retirementAnnuity, money, pct } from "../lib/calc.js";
-import { toolSchema, todaySA } from "../lib/site.js";
+import { toolSchema } from "../lib/site.js";
 const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
 const ex = retirementAnnuity({ monthly: 2000, income: 360000 });
 const faqs = [
@@ -15,7 +15,7 @@ const faqs = [
 <Base title={`Retirement Annuity Tax Calculator ${yr} – How Much Tax Does an RA Save?`}
   description={`See how much tax a retirement annuity saves you under SARS ${ty} rules, the real monthly cost after tax, and what your RA could grow to.`}
   h1="Retirement annuity tax calculator" lede="See the tax an RA saves you each year, and what it could grow to."
-  trail={[["Home", "/"], ["Retirement annuity calculator", "/retirement-annuity-calculator/"]]} faqs={faqs} updated={todaySA()}
+  trail={[["Home", "/"], ["Retirement annuity calculator", "/retirement-annuity-calculator/"]]} faqs={faqs} updated
   schema={toolSchema("Retirement Annuity Tax Calculator", "/retirement-annuity-calculator/", "Calculates the tax saving and growth of a South African retirement annuity.")}>
   <RetirementCalc client:load />
   <h2>Why an RA is cheaper than it looks</h2>
