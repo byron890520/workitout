@@ -5,7 +5,7 @@ import "@fontsource/atkinson-hyperlegible/latin-700.css";
 import "../styles/global.css";
 import ToolsMenu from "../components/ToolsMenu.jsx";
 import MathTrail from "../components/MathTrail.astro";
-import { CONFIG, DEMO, BASE, TOOLS, glyphFor } from "../lib/site.js";
+import { CONFIG, DEMO, BASE, TOOLS, GROUPS, glyphFor } from "../lib/site.js";
 
 const {
   title, description, h1, lede = "", trail = [], faqs = [], schema = null, lang = "en-ZA",
@@ -36,7 +36,7 @@ const faqLd = faqs.length ? {
 const graph = [schema, crumbsLd, faqLd].filter(Boolean);
 const ld = graph.length ? JSON.stringify({ "@context": "https://schema.org", "@graph": graph }) : "";
 
-const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc: t.desc, glyph: t.glyph, alt: t.alt }));
+const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc: t.desc, glyph: t.glyph, alt: t.alt, group: t.group }));
 ---
 <!doctype html>
 <html lang={lang}>
@@ -74,7 +74,7 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
 <a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
   <a class="logo" href="/"><span class="mark" aria-hidden="true">W</span>{CONFIG.brand}</a>
-  <ToolsMenu client:load items={menuItems} current={path} />
+  <ToolsMenu client:load items={menuItems} groups={GROUPS} current={path} />
 </div></header>
 <main id="main">
   {hasHero ? <slot name="hero" /> : (
