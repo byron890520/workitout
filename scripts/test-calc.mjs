@@ -1,6 +1,6 @@
 // Quick sanity checks against hand-worked SARS examples. Run: npm test
 import assert from "node:assert/strict";
-import { salary, incomeTax, medicalCredit, transferDuty, vat, compound, units } from "../src/lib/calc.js";
+import { salary, incomeTax, medicalCredit, transferDuty, vat, compound, units, grossFromNet, hourly, taxRefund, retirementAnnuity } from "../src/lib/calc.js";
 
 const s = salary({ monthlyGross: 30000, age: 30 });
 assert.equal(Math.round(s.annualTax), 56172, "PAYE on R30 000/month");
@@ -14,4 +14,9 @@ assert.equal(compound({ start: 10000, rate: 10, years: 10, perYear: 1 }).balance
 assert.equal(compound({ monthly: 1000, rate: 10, years: 10, perYear: 12 }).balance.toFixed(2), "204844.98", "monthly top-ups, monthly compounding");
 assert.equal(compound({ start: 5000, monthly: 500, rate: 0, years: 3 }).balance, 23000, "no interest = what you paid in");
 assert.equal(units(500, 2.71).toFixed(1), "184.5", "prepaid units");
+assert.equal(Math.round(grossFromNet({ net: 25141.88 }).gross), 30000, "net to gross reverses salary");
+assert.equal(hourly({ rate: 100, hoursPerDay: 8, daysPerWeek: 5 }).monthly.toFixed(2), "17333.33", "R100/hour to monthly");
+assert.equal(Math.round(taxRefund({ income: 360000, payePaid: 56172 }).refund), 0, "no extra deductions = no refund");
+assert.equal(Math.round(taxRefund({ income: 360000, payePaid: 56172, ra: 24000 }).refund), 6240, "R24k RA at 26% marginal");
+assert.equal(Math.round(retirementAnnuity({ monthly: 2000, income: 360000 }).saved), 6240, "RA tax saving");
 console.log("All calculator checks passed.");

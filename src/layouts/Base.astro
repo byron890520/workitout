@@ -22,7 +22,7 @@ const ogName = path === "/" ? "home"
   : path.startsWith("/word-hints/wordle") ? "wordle"
   : path.startsWith("/word-hints/wortel") ? "wortel"
   : (path.split("/")[1] || "home");
-const ogKnown = ["home", "salary-calculator", "vat-calculator", "compound-interest-calculator", "electricity-calculator", "transfer-duty-calculator", "word-hints", "wordle", "wortel", "woord-van-die-dag"];
+const ogKnown = ["home", "net-to-gross-salary-calculator", "hourly-rate-calculator", "tax-refund-calculator", "retirement-annuity-calculator", "answers", "salary-calculator", "vat-calculator", "compound-interest-calculator", "electricity-calculator", "transfer-duty-calculator", "word-hints", "wordle", "wortel", "woord-van-die-dag"];
 const ogImage = `${BASE}/og/${ogKnown.includes(ogName) ? ogName : "home"}.png`;
 
 const crumbsLd = trail.length > 1 ? {
@@ -104,7 +104,7 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
 </main>
 <footer class="site"><div class="wrap">
   <ul class="foot-tools">{menuItems.map((t) => <li><a href={t.href}>{t.title}</a></li>)}</ul>
-  <ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/terms/">Terms &amp; disclaimer</a></li></ul>
+  <ul><li><a href="/answers/">Tax answers</a></li><li><a href="/free-calculators-for-your-website/">Calculators for your website</a></li><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/terms/">Terms &amp; disclaimer</a></li></ul>
   <p>&copy; {new Date().getFullYear()} {CONFIG.brand}. Calculators give estimates only and are not financial, tax or legal advice.</p>
 </div></footer>
 <script is:inline>

@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { TaxRefundCalc } from "../components/Calculators.jsx";
+import { RATES, taxRefund, money } from "../lib/calc.js";
+import { toolSchema, todaySA } from "../lib/site.js";
+const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
+const ex = taxRefund({ income: 360000, payePaid: 56172, ra: 24000 });
+const faqs = [
+  ["How accurate is this tax refund estimate?", "It's a good guide for salaried people whose main extras are a private retirement annuity and medical costs. It doesn't cover travel allowances, rental income, capital gains or other income, so SARS's assessment can differ."],
+  ["Where do I find my taxable income and PAYE?", "On your IRP5 from your employer. Taxable income from employment is usually code 3699 and PAYE paid is code 4102."],
+  ["When does SARS pay refunds?", "If your return isn't selected for verification, refunds are often paid within days of assessment. Make sure your banking details on eFiling are up to date."],
+];
+---
+<Base title={`SARS Tax Refund Calculator ${yr} (${ty}) – Estimate Your Refund`}
+  description={`Free SARS tax refund calculator for ${ty}. Estimate your refund from your IRP5, retirement annuity contributions and medical expenses.`}
+  h1={`SARS tax refund calculator (${ty})`} lede="Estimate what SARS will pay back, or what you'll owe, when your return is assessed."
+  trail={[["Home", "/"], ["Tax refund calculator", "/tax-refund-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("SARS Tax Refund Calculator", "/tax-refund-calculator/", "Estimates a South African income tax refund from IRP5 figures and deductions.")}>
+  <TaxRefundCalc client:load />
+  <h2>How the estimate works</h2>
+  <p>During the year your employer deducts PAYE as if your salary were your only tax matter. On assessment SARS recalculates your tax with everything included: retirement annuity contributions you paid yourself (up to 27.5% of income, capped at {money(RATES.retirementCapAmount)}), the medical scheme fees tax credit and the additional medical expenses credit. If the result is less than the PAYE already paid, you get the difference back.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>Thabo earns {money(360000)} a year and paid {money(56172)} PAYE. He also paid {money(24000)} into a retirement annuity privately. That lowers his taxable income to {money(ex.taxable)}, and his tax for the year to {money(ex.liability)}. His estimated refund is <strong>{money(ex.refund)}</strong>.</p></div>
+  <Related exclude="tax-refund-calculator" answersFor="tax-refund-calculator" />
+</Base>

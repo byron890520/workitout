@@ -1,9 +1,21 @@
 ---
 import Keypad from "./Keypad.astro";
 import { TOOLS, DEMO } from "../lib/site.js";
-const { exclude } = Astro.props;
+import { ANSWERS } from "../lib/answers.js";
+const { exclude, answersFor, current } = Astro.props;
 const items = TOOLS.filter((t) => t.slug !== exclude).map((t) => ({ href: `/${t.slug}/`, ...t }));
+// Answers for this tool first, then fill up to six from the rest so every page links deeper.
+const own = answersFor ? ANSWERS.filter((a) => a.tool === answersFor && a.slug !== current) : [];
+const rest = ANSWERS.filter((a) => a.slug !== current && !own.includes(a) && (answersFor ? a.group === (own[0]?.group ?? a.group) : true));
+const answers = [...own, ...rest].slice(0, 6);
 ---
 {DEMO && <div class="ad-slot" aria-hidden="true">Ad space</div>}
+{answersFor !== undefined && answers.length > 0 && (
+  <section class="related-answers">
+    <h2>Related questions</h2>
+    <ul class="answer-list">{answers.map((a) => <li><a href={`/answers/${a.slug}/`}>{a.q}</a></li>)}</ul>
+    <p><a href="/answers/">All tax and money answers →</a></p>
+  </section>
+)}
 <h2>More free tools</h2>
 <Keypad items={items} />

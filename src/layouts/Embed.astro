@@ -1,0 +1,38 @@
+---
+// Bare calculator for other websites to show in an iframe. Never indexed; the canonical points at the full page.
+import "@fontsource-variable/bricolage-grotesque/opsz.css";
+import "@fontsource/atkinson-hyperlegible/latin-400.css";
+import "@fontsource/atkinson-hyperlegible/latin-700.css";
+import "../styles/global.css";
+import { BASE, CONFIG } from "../lib/site.js";
+const { tool } = Astro.props;
+---
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{tool.title} | {CONFIG.brand}</title>
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href={`${BASE}/${tool.slug}/`}>
+</head>
+<body class="embed">
+  <main class="embed-main">
+    <slot />
+    <p class="embed-by">Free calculator by <a href={`${BASE}/${tool.slug}/?utm_source=embed`} target="_blank" rel="noopener">{CONFIG.brand}</a></p>
+  </main>
+<script is:inline>
+// Tell the host page how tall we are so its iframe can fit without scrollbars.
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function send() {
+    var h = Math.ceil(document.documentElement.scrollHeight);
+    if (h !== last) { last = h; window.parent.postMessage({ wioHeight: h }, "*"); }
+  }
+  if ("ResizeObserver" in window) new ResizeObserver(send).observe(document.body);
+  addEventListener("load", send); send();
+})();
+</script>
+</body>
+</html>

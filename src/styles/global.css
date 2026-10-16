@@ -356,3 +356,29 @@ header.site .wrap{justify-content:space-between}
 .woord-list span,.woord-list time{color:var(--muted)}
 .woord-list time{font-size:.85rem;margin-left:4px}
 .woord-nav{display:flex;justify-content:space-between;gap:12px;margin:20px 0;flex-wrap:wrap}
+
+/* Answer pages */
+.answer-short{font-size:1.15rem;line-height:1.55;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--marigold);border-radius:var(--r-md);padding:18px 20px;max-width:none}
+.answer-cta{display:flex;gap:16px;align-items:center;margin:18px 0 8px;padding:14px 18px;border-radius:var(--r-md);background:var(--fynbos);color:var(--on-fynbos);text-decoration:none;box-shadow:0 5px 0 var(--fynbos-deep);transition:transform .2s var(--ease-spring)}
+.answer-cta:hover{transform:translateY(-2px)}
+.answer-cta .key{flex:none;transform:none}
+.answer-list{display:grid;gap:8px;padding:0;list-style:none;max-width:none}
+@media(min-width:720px){.answer-list{grid-template-columns:1fr 1fr}}
+.answer-list a{display:block;height:100%;box-sizing:border-box;padding:12px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);text-decoration:none;font-weight:700;color:var(--ink)}
+.answer-list a:hover{border-color:var(--fynbos)}
+.example{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 20px 8px;max-width:none}
+
+/* Embeddable calculators */
+body.embed{background:var(--paper)}
+.embed-main{padding:16px;max-width:1000px;margin:0 auto}
+.embed-title{font:800 1.5rem/1.15 var(--display);margin:0 0 6px}
+body.embed .peek{display:none}
+@media(min-width:820px){body.embed .result{position:static}}
+.embed-by{margin:14px 0 0;font-size:.9rem;color:var(--muted)}
+.embed-list{display:grid;gap:16px}
+.embed-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.embed-head{display:flex;gap:14px;align-items:center}
+.embed-head h3{margin:0}.embed-head p{margin:2px 0 0;color:var(--muted)}
+.embed-item textarea{width:100%;box-sizing:border-box;margin:14px 0 10px;font:13px/1.45 ui-monospace,Menlo,monospace;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);resize:vertical}
+.embed-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.table-scroll td+td,.table-scroll th+th{white-space:nowrap}

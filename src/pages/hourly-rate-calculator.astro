@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { HourlyCalc } from "../components/Calculators.jsx";
+import { RATES, hourly, money } from "../lib/calc.js";
+import { toolSchema, todaySA } from "../lib/site.js";
+const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
+const ex = hourly({ rate: 150 });
+const faqs = [
+  ["How do I convert an hourly rate to a monthly salary?", "Multiply your hourly rate by hours per day, days per week and 52 weeks, then divide by 12. At R150 an hour for a 40-hour week that's R26 000 a month."],
+  ["Why not just multiply a weekly wage by four?", "A month averages 4.33 weeks, not 4. Multiplying by four understates monthly pay by about 8%."],
+  ["What hourly rate should I charge as a freelancer?", "Start from the yearly income you need, then divide by the hours you can realistically bill. Most freelancers bill well under 40 hours a week once admin, sales and leave are counted, so their hourly rate needs to be higher than an employee's."],
+];
+---
+<Base title={`Hourly Rate to Salary Calculator South Africa ${yr} – Per Month & Year`}
+  description={`Convert an hourly rate into weekly, monthly and yearly pay, plus take-home pay after SARS ${ty} PAYE and UIF. Free South African calculator.`}
+  h1="Hourly rate to salary calculator" lede="Turn an hourly rate into monthly and yearly pay, before and after tax."
+  trail={[["Home", "/"], ["Hourly rate calculator", "/hourly-rate-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Hourly Rate to Salary Calculator", "/hourly-rate-calculator/", "Converts an hourly rate into weekly, monthly and annual pay in South Africa.")}>
+  <HourlyCalc client:load />
+  <h2>How it's worked out</h2>
+  <p>Weekly pay is your hourly rate × hours a day × days a week. Yearly pay is weekly pay × 52, and monthly pay is the yearly figure divided by 12. Tax is estimated as if the same amount were a regular monthly salary, using the SARS {ty} tables.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>At <strong>R150 an hour</strong>, 8 hours a day, 5 days a week: R150 × 8 × 5 = {money(ex.perWeek)} a week. × 52 = {money(ex.annual)} a year, or <strong>{money(ex.monthly)} a month</strong>. After PAYE of {money(ex.paye)} and UIF of {money(ex.uif)}, take-home is about {money(ex.net)}.</p></div>
+  <Related exclude="hourly-rate-calculator" answersFor="hourly-rate-calculator" />
+</Base>

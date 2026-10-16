@@ -1,0 +1,24 @@
+---
+import Embed from "../../layouts/Embed.astro";
+import { SalaryCalc, NetToGrossCalc, HourlyCalc, TaxRefundCalc, RetirementCalc, VatCalc, CompoundCalc, ElectricityCalc, TransferDutyCalc } from "../../components/Calculators.jsx";
+import { TOOLS } from "../../lib/site.js";
+import { EMBEDDABLE } from "../../lib/embed.js";
+
+export function getStaticPaths() {
+  return EMBEDDABLE.map((slug) => ({ params: { tool: slug }, props: { tool: TOOLS.find((t) => t.slug === slug) } }));
+}
+const { tool } = Astro.props;
+const s = tool.slug;
+---
+<Embed tool={tool}>
+  <h1 class="embed-title">{tool.title}</h1>
+  {s === "salary-calculator" && <SalaryCalc client:load />}
+  {s === "net-to-gross-salary-calculator" && <NetToGrossCalc client:load />}
+  {s === "hourly-rate-calculator" && <HourlyCalc client:load />}
+  {s === "tax-refund-calculator" && <TaxRefundCalc client:load />}
+  {s === "retirement-annuity-calculator" && <RetirementCalc client:load />}
+  {s === "vat-calculator" && <VatCalc client:load />}
+  {s === "compound-interest-calculator" && <CompoundCalc client:load />}
+  {s === "electricity-calculator" && <ElectricityCalc client:load />}
+  {s === "transfer-duty-calculator" && <TransferDutyCalc client:load />}
+</Embed>

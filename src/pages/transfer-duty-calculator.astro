@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { TransferDutyCalc } from "../components/Calculators.jsx";
-import { RATES, money } from "../lib/calc.js";
+import { RATES, money, transferDuty } from "../lib/calc.js";
 import { toolSchema, todaySA } from "../lib/site.js";
 
 const t = RATES.transferDuty;
@@ -13,13 +13,15 @@ const rows = t.map(([lo, base, rate], i) => {
   return [range, duty];
 });
 const ty = RATES.taxYear;
+const yr = "20" + ty.split("/")[1];
+const ex = transferDuty(2500000);
 const faqs = [
   ["Who pays transfer duty?", "The buyer pays it. Your conveyancing attorney collects it and pays it to SARS before transfer."],
   ["Is there transfer duty on properties under R1.21 million?", `No. For ${ty}, properties up to ${money(t[1][0])} are exempt from transfer duty, although you'll still pay legal and registration costs.`],
   ["Do I pay transfer duty on a new development?", "Not if the seller is a VAT-registered developer selling in the course of their business. The price then includes VAT instead."],
 ];
 ---
-<Base title={`Bond Transfer Duty Calculator South Africa ${ty} | SARS Rates`}
+<Base title={`Bond Transfer Duty Calculator South Africa ${yr} (${ty}) | SARS Rates`}
   description={`Calculate bond transfer duty on a property purchase in seconds using the ${ty} rates. No duty on homes up to R1.21 million.`}
   h1="Bond transfer duty calculator" lede="Work out the SARS transfer duty on a home or property purchase."
   trail={[["Home", "/"], ["Bond transfer duty calculator", "/transfer-duty-calculator/"]]} faqs={faqs} updated={todaySA()}
@@ -29,6 +31,8 @@ const faqs = [
   <p>Transfer duty is often called bond transfer duty because it's paid when you buy a home, usually with a bond. It's a SARS tax on the transfer of the property itself, so you pay it whether or not you take out a bond.</p>
   <div class="table-scroll"><table><thead><tr><th>Property value</th><th>Transfer duty</th></tr></thead>
     <tbody>{rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table></div>
+  <h2>Worked example</h2>
+  <div class="example"><p>You buy a house for <strong>R2 500 000</strong>. That falls in the 8% band above {money(t[3][0])}: {money(t[3][1])} + 8% × (R2 500 000 − {money(t[3][0])}) = <strong>{money(ex)}</strong> transfer duty, about {(ex / 25000).toFixed(1)}% of the price.</p></div>
   <p>The buyer pays transfer duty, usually through the conveyancing attorney before the property is registered in their name. Remember to budget separately for conveyancing fees, bond registration costs and Deeds Office fees, which this calculator doesn't include.</p>
-  <Related exclude="transfer-duty-calculator" />
+  <Related exclude="transfer-duty-calculator" answersFor="transfer-duty-calculator" />
 </Base>

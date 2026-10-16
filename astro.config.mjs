@@ -31,13 +31,13 @@ export default defineConfig({
     react(),
     // The preview build is never indexed, so it gets no sitemap.
     ...(demo ? [] : [sitemap({
-      filter: (page) => !page.includes("/404"),
+      filter: (page) => !page.includes("/404") && !page.includes("/embed/"),
       serialize(item) {
         const path = new URL(item.url).pathname;
         const date = lastmod.get(path) || today;
         const daily = path.includes("-today/") || path.includes("-vandag/") || path === "/word-hints/" || path === "/woord-van-die-dag/";
         return { ...item, lastmod: date, changefreq: daily ? "daily" : "monthly",
-          priority: path === "/" ? 1.0 : daily || path.endsWith("-calculator/") ? 0.9 : 0.5 };
+          priority: path === "/" ? 1.0 : daily || path.endsWith("-calculator/") ? 0.9 : path.startsWith("/answers/") ? 0.7 : 0.5 };
       },
     })]),
   ],

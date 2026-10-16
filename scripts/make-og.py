@@ -20,6 +20,11 @@ SURFACE, LINE_DEEP = (250, 251, 248), (185, 195, 186)
 PAGES = [
     ("home", "WORK IT OUT", "South African calculators and daily word hints", None),
     ("salary-calculator", "Salary after tax calculator", "Take-home pay after PAYE, UIF and medical aid credits", ("R", False)),
+    ("net-to-gross-salary-calculator", "Net to gross salary calculator", "The gross salary you need for the take-home pay you want", ("+R", True)),
+    ("hourly-rate-calculator", "Hourly rate to salary calculator", "Weekly, monthly and yearly pay from an hourly rate", ("R/h", False)),
+    ("tax-refund-calculator", "SARS tax refund calculator", "Estimate your refund when SARS assesses your return", ("ITR", True)),
+    ("retirement-annuity-calculator", "Retirement annuity tax calculator", "The tax an RA saves you, and what it grows to", ("RA", False)),
+    ("answers", "Tax and money answers", "Quick South African answers with the working shown", ("?", True)),
     ("vat-calculator", "VAT calculator (15%)", "Add or remove South African VAT in one tap", ("15%", True)),
     ("compound-interest-calculator", "Compound interest calculator", "See how savings and monthly top-ups grow over time", ("%↑", False)),
     ("electricity-calculator", "Prepaid electricity calculator", "Units per rand and what each appliance costs to run", ("kWh", True)),

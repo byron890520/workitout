@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { NetToGrossCalc } from "../components/Calculators.jsx";
+import { RATES, grossFromNet, money } from "../lib/calc.js";
+import { toolSchema, todaySA } from "../lib/site.js";
+const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
+const ex = grossFromNet({ net: 20000 });
+const rows = [10000, 15000, 20000, 25000, 30000, 40000, 50000].map((n) => [n, grossFromNet({ net: n }).gross]);
+const faqs = [
+  ["How do I work out gross salary from net?", "You can't simply add a fixed percentage, because tax brackets are marginal. The calculator tries gross salaries until the take-home pay after PAYE and UIF matches the amount you want."],
+  ["What gross salary do I need to take home R20 000?", `About ${money(ex.gross)} a month if you're under 65 with no medical aid or pension deductions, for the ${ty} tax year.`],
+  ["Is this the same as cost to company (CTC)?", "Not quite. CTC also includes what your employer pays on your behalf, like their 1% UIF, SDL, and any pension or medical aid contributions. Ask what's included in a CTC offer before comparing it with a gross salary."],
+];
+---
+<Base title={`Net to Gross Salary Calculator South Africa ${yr} (${ty})`}
+  description={`Free SARS ${yr} net to gross calculator. Enter the take-home pay you want and see the gross salary you need before PAYE and UIF.`}
+  h1={`Net to gross salary calculator (${ty})`}
+  lede="Know the take-home pay you need? See the gross salary to ask for."
+  trail={[["Home", "/"], ["Net to gross calculator", "/net-to-gross-salary-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Net to Gross Salary Calculator", "/net-to-gross-salary-calculator/", "Works out the gross salary needed for a target take-home pay in South Africa.")}>
+  <NetToGrossCalc client:load />
+  <h2>Why this is useful</h2>
+  <p>Job offers and salary negotiations are in gross terms, but your budget runs on what lands in your account. This calculator works backwards from your take-home pay using the SARS {ty} tax tables, rebates, medical aid tax credits and the UIF cap.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>To take home <strong>R20 000</strong> a month, you need a gross salary of about <strong>{money(ex.gross)}</strong>. PAYE on that is {money(ex.paye)} and UIF {money(ex.uif)}, which together make up the difference.</p></div>
+  <h3>Gross salary needed for common take-home amounts ({ty})</h3>
+  <div class="table-scroll"><table><thead><tr><th>Take-home per month</th><th>Gross salary needed</th></tr></thead>
+    <tbody>{rows.map(([n, g]) => <tr><td>{money(n)}</td><td>{money(g)}</td></tr>)}</tbody></table></div>
+  <Related exclude="net-to-gross-salary-calculator" answersFor="net-to-gross-salary-calculator" />
+</Base>

@@ -1,4 +1,4 @@
-import { salary, vat, compound, transferDuty, units, applianceCost, R, num, pct } from "../lib/calc.js";
+import { salary, vat, compound, transferDuty, units, applianceCost, grossFromNet, hourly, taxRefund, retirementAnnuity, R, num, pct } from "../lib/calc.js";
 import { useRef, useState } from "react";
 import { AnimatedNumber, useUrlState, ShareButton, Field, ResultPeek, MoneyInput, Chips, Checked } from "./shared.jsx";
 import { RATES } from "../lib/calc.js";
@@ -299,6 +299,180 @@ export function TransferDutyCalc() {
         <ShareButton text={`Transfer duty on ${R(price)} is ${R(d)}.`} />
       </div>
       <ResultPeek label={"Transfer duty"} text={R(d)} target={res} />
+    </div>
+  );
+}
+
+const AgeSelect = ({ id, value, onChange }) => (
+  <select id={id} value={value} onChange={onChange}>
+    <option value="30">Under 65</option><option value="65">65 to 74</option><option value="75">75 or older</option>
+  </select>
+);
+
+export function NetToGrossCalc() {
+  const [s, setS, set] = useUrlState({ net: "20000", age: "30", med: "0", ret: "0" });
+  const val = (key) => (v) => setS((st) => ({ ...st, [key]: v }));
+  const r = grossFromNet({ net: s.net, age: s.age, medicalMembers: s.med, retirement: s.ret });
+  const res = useRef(null);
+  return (
+    <div className="tool">
+      <form className="card" onSubmit={(e) => e.preventDefault()}>
+        <Field id="ng-net" label="Take-home pay you want each month (R)">
+          <MoneyInput id="ng-net" value={s.net} onValue={val("net")} />
+          <Chips values={[10000, 20000, 30000, 50000]} current={s.net} onPick={val("net")} label={k} />
+        </Field>
+        <Field id="ng-age" label="Your age"><AgeSelect id="ng-age" value={s.age} onChange={set("age")} /></Field>
+        <Field id="ng-med" label="People on your medical aid (incl. you)" hint="Enter 0 if you don't have medical aid.">
+          <input id="ng-med" type="number" inputMode="numeric" min="0" step="1" value={s.med} onChange={set("med")} />
+        </Field>
+        <Field id="ng-ret" label="Monthly retirement / pension contribution (R)">
+          <MoneyInput id="ng-ret" value={s.ret} onValue={val("ret")} />
+        </Field>
+      </form>
+      <div className="result" aria-live="polite" ref={res}>
+        <div className="label">Gross salary you need per month</div>
+        <AnimatedNumber value={r.gross} format={R} />
+        <dl>
+          <dt>Gross per year</dt><dd>{R(r.gross * 12)}</dd>
+          <dt>PAYE (income tax)</dt><dd>{R(r.paye)}</dd>
+          <dt>UIF (1%)</dt><dd>{R(r.uif)}</dd>
+          <dt>Retirement contribution</dt><dd>{R(r.retirement)}</dd>
+          <dt>Take-home pay</dt><dd>{R(r.net)}</dd>
+        </dl>
+        <Checked>Uses SARS {RATES.taxYear} tax tables, rebates and medical credits</Checked>
+        <ShareButton text={`To take home ${R(r.net)} a month you need a gross salary of ${R(r.gross)}.`} />
+      </div>
+      <ResultPeek label="Gross needed" text={R(r.gross)} target={res} />
+    </div>
+  );
+}
+
+export function HourlyCalc() {
+  const [s, setS, set] = useUrlState({ rate: "150", hours: "8", days: "5", age: "30" });
+  const val = (key) => (v) => setS((st) => ({ ...st, [key]: v }));
+  const r = hourly({ rate: s.rate, hoursPerDay: s.hours, daysPerWeek: s.days, age: s.age });
+  const res = useRef(null);
+  return (
+    <div className="tool">
+      <form className="card" onSubmit={(e) => e.preventDefault()}>
+        <Field id="h-rate" label="Hourly rate (R)">
+          <MoneyInput id="h-rate" value={s.rate} onValue={val("rate")} />
+          <Chips values={[50, 100, 250, 500]} current={s.rate} onPick={val("rate")} label={(v) => "R" + v} />
+        </Field>
+        <div className="two">
+          <Field id="h-hours" label="Hours a day"><input id="h-hours" {...n} max="24" step="0.5" value={s.hours} onChange={set("hours")} /></Field>
+          <Field id="h-days" label="Days a week"><input id="h-days" {...n} max="7" step="0.5" value={s.days} onChange={set("days")} /></Field>
+        </div>
+        <Field id="h-age" label="Your age"><AgeSelect id="h-age" value={s.age} onChange={set("age")} /></Field>
+      </form>
+      <div className="result" aria-live="polite" ref={res}>
+        <div className="label">Gross pay per month</div>
+        <AnimatedNumber value={r.monthly} format={R} />
+        <dl>
+          <dt>Per week</dt><dd>{R(r.perWeek)}</dd>
+          <dt>Per year</dt><dd>{R(r.annual)}</dd>
+          <dt>PAYE per month</dt><dd>{R(r.paye)}</dd>
+          <dt>UIF per month</dt><dd>{R(r.uif)}</dd>
+          <dt>Take-home per month</dt><dd>{R(r.net)}</dd>
+        </dl>
+        <Checked>52 weeks a year; tax from SARS {RATES.taxYear} tables</Checked>
+        <ShareButton text={`R${s.rate} an hour works out to ${R(r.monthly)} a month before tax.`} />
+      </div>
+      <ResultPeek label="Per month" text={R(r.monthly)} target={res} />
+    </div>
+  );
+}
+
+export function TaxRefundCalc() {
+  const [s, setS, set] = useUrlState({ income: "360000", paye: "56172", age: "30", med: "0", contrib: "0", oop: "0", ra: "24000" });
+  const val = (key) => (v) => setS((st) => ({ ...st, [key]: v }));
+  const r = taxRefund({ income: s.income, payePaid: s.paye, age: s.age, medicalMembers: s.med, medicalContrib: s.contrib, outOfPocket: s.oop, ra: s.ra });
+  const owe = r.refund < 0;
+  const res = useRef(null);
+  return (
+    <div className="tool">
+      <form className="card" onSubmit={(e) => e.preventDefault()}>
+        <div className="two">
+          <Field id="tr-income" label="Taxable income for the year (R)" hint="Code 3699 on your IRP5.">
+            <MoneyInput id="tr-income" value={s.income} onValue={val("income")} />
+          </Field>
+          <Field id="tr-paye" label="PAYE paid for the year (R)" hint="Code 4102 on your IRP5.">
+            <MoneyInput id="tr-paye" value={s.paye} onValue={val("paye")} />
+          </Field>
+        </div>
+        <Field id="tr-ra" label="Retirement annuity paid privately this year (R)" hint="Only contributions not already deducted through payroll.">
+          <MoneyInput id="tr-ra" value={s.ra} onValue={val("ra")} />
+        </Field>
+        <div className="two">
+          <Field id="tr-age" label="Your age"><AgeSelect id="tr-age" value={s.age} onChange={set("age")} /></Field>
+          <Field id="tr-med" label="People on medical aid">
+            <input id="tr-med" type="number" inputMode="numeric" min="0" step="1" value={s.med} onChange={set("med")} />
+          </Field>
+        </div>
+        <div className="two">
+          <Field id="tr-contrib" label="Medical aid paid for the year (R)">
+            <MoneyInput id="tr-contrib" value={s.contrib} onValue={val("contrib")} />
+          </Field>
+          <Field id="tr-oop" label="Medical costs not covered (R)">
+            <MoneyInput id="tr-oop" value={s.oop} onValue={val("oop")} />
+          </Field>
+        </div>
+      </form>
+      <div className="result" aria-live="polite" ref={res}>
+        <div className="label">{owe ? "Estimated amount you'll owe SARS" : "Estimated refund from SARS"}</div>
+        <AnimatedNumber value={Math.abs(r.refund)} format={R} />
+        <dl>
+          <dt>Retirement deduction allowed</dt><dd>{R(r.raDeduct)}</dd>
+          <dt>Taxable income after deductions</dt><dd>{R(r.taxable)}</dd>
+          <dt>Medical tax credit</dt><dd>{R(r.mtc)}</dd>
+          <dt>Additional medical credit</dt><dd>{R(r.amtc)}</dd>
+          <dt>Tax you actually owe for the year</dt><dd>{R(r.liability)}</dd>
+          <dt>PAYE already paid</dt><dd>{R(r.paid)}</dd>
+        </dl>
+        <Checked>Estimate using SARS {RATES.taxYear} tables; your assessment is final</Checked>
+        <ShareButton text={owe ? `I'd owe SARS about ${R(-r.refund)}.` : `My estimated SARS refund is ${R(r.refund)}.`} />
+      </div>
+      <ResultPeek label={owe ? "You owe" : "Refund"} text={R(Math.abs(r.refund))} target={res} />
+    </div>
+  );
+}
+
+export function RetirementCalc() {
+  const [s, setS, set] = useUrlState({ monthly: "2000", income: "360000", age: "30", rate: "9", years: "25" });
+  const val = (key) => (v) => setS((st) => ({ ...st, [key]: v }));
+  const r = retirementAnnuity({ monthly: s.monthly, income: s.income, age: s.age, rate: s.rate, years: s.years });
+  const res = useRef(null);
+  return (
+    <div className="tool">
+      <form className="card" onSubmit={(e) => e.preventDefault()}>
+        <Field id="ra-monthly" label="Monthly retirement annuity contribution (R)">
+          <MoneyInput id="ra-monthly" value={s.monthly} onValue={val("monthly")} />
+          <Chips values={[500, 1000, 2000, 5000]} current={s.monthly} onPick={val("monthly")} label={k} />
+        </Field>
+        <Field id="ra-income" label="Your taxable income per year (R)">
+          <MoneyInput id="ra-income" value={s.income} onValue={val("income")} />
+        </Field>
+        <Field id="ra-age" label="Your age"><AgeSelect id="ra-age" value={s.age} onChange={set("age")} /></Field>
+        <div className="two">
+          <Field id="ra-rate" label="Growth per year (%)"><input id="ra-rate" {...n} max="30" step="0.25" value={s.rate} onChange={set("rate")} /></Field>
+          <Field id="ra-years" label="Years to retirement"><input id="ra-years" {...n} max="60" step="1" value={s.years} onChange={set("years")} /></Field>
+        </div>
+      </form>
+      <div className="result" aria-live="polite" ref={res}>
+        <div className="label">Tax you save each year</div>
+        <AnimatedNumber value={r.saved} format={R} />
+        <dl>
+          <dt>Real cost per month after tax saving</dt><dd>{R(r.netCost)}</dd>
+          <dt>Deduction allowed per year</dt><dd>{R(r.deduct)}</dd>
+          <dt>Your marginal tax rate</dt><dd>{pct(r.marginal)}</dd>
+          <dt>Fund value in {s.years} years</dt><dd>{R(r.balance)}</dd>
+          <dt>Of which you paid in</dt><dd>{R(r.paid)}</dd>
+        </dl>
+        {r.capped && <p className="hint">Part of your contribution is above the 27.5% / {R(RATES.retirementCapAmount)} limit. The excess carries over to future years.</p>}
+        <Checked>SARS {RATES.taxYear} tables and s11F limits</Checked>
+        <ShareButton text={`A ${R(+s.monthly)} monthly RA saves me ${R(r.saved)} tax a year.`} />
+      </div>
+      <ResultPeek label="Tax saved / yr" text={R(r.saved)} target={res} />
     </div>
   );
 }

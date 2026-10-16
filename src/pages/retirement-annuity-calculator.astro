@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import Related from "../components/Related.astro";
+import { RetirementCalc } from "../components/Calculators.jsx";
+import { RATES, retirementAnnuity, money, pct } from "../lib/calc.js";
+import { toolSchema, todaySA } from "../lib/site.js";
+const ty = RATES.taxYear, yr = "20" + ty.split("/")[1];
+const ex = retirementAnnuity({ monthly: 2000, income: 360000 });
+const faqs = [
+  ["How much of my RA contribution is tax-deductible?", `Retirement annuity, pension and provident fund contributions together are deductible up to 27.5% of the greater of your remuneration or taxable income, capped at ${money(RATES.retirementCapAmount)} a year for ${ty}.`],
+  ["What happens to contributions above the limit?", "They carry forward to the next tax year and can be deducted then, or used to reduce tax on your retirement lump sum."],
+  ["Can I take my RA money out early?", "Generally not before age 55, except in specific cases such as emigration or a very small fund value. Under the two-pot system, part of new contributions goes to a savings pot you can access once a year, taxed at your marginal rate."],
+];
+---
+<Base title={`Retirement Annuity Tax Calculator ${yr} – How Much Tax Does an RA Save?`}
+  description={`See how much tax a retirement annuity saves you under SARS ${ty} rules, the real monthly cost after tax, and what your RA could grow to.`}
+  h1="Retirement annuity tax calculator" lede="See the tax an RA saves you each year, and what it could grow to."
+  trail={[["Home", "/"], ["Retirement annuity calculator", "/retirement-annuity-calculator/"]]} faqs={faqs} updated={todaySA()}
+  schema={toolSchema("Retirement Annuity Tax Calculator", "/retirement-annuity-calculator/", "Calculates the tax saving and growth of a South African retirement annuity.")}>
+  <RetirementCalc client:load />
+  <h2>Why an RA is cheaper than it looks</h2>
+  <p>Contributions come off your taxable income, so SARS effectively pays part of them at your marginal tax rate. The higher your income, the bigger the saving. Growth inside the fund is also free of tax on interest, dividends and capital gains until you retire.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>On {money(360000)} a year, a <strong>R2 000 a month</strong> RA ({money(24000)} a year) saves <strong>{money(ex.saved)}</strong> in tax at a {pct(ex.marginal)} marginal rate. The real cost is about {money(ex.netCost)} a month. At 9% growth for 25 years it could grow to about {money(ex.balance)}.</p></div>
+  <Related exclude="retirement-annuity-calculator" answersFor="retirement-annuity-calculator" />
+</Base>

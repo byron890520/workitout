@@ -10,7 +10,7 @@ const faqs = [
   ["When must a business register for VAT?", "Registration becomes compulsory once taxable turnover passes the SARS threshold in a 12-month period. Check the current threshold on the SARS website before deciding."],
 ];
 ---
-<Base title="VAT Calculator South Africa (15%) – Add or Remove VAT"
+<Base title="VAT Calculator South Africa (15%) – Add or Remove VAT Instantly (2026)"
   description="Free 15% VAT calculator for South Africa. Add VAT to a price or remove VAT from an inclusive amount instantly, with the formulas explained."
   h1="VAT calculator (15%)" lede="Add or remove South African VAT from any amount."
   trail={[["Home", "/"], ["VAT calculator", "/vat-calculator/"]]} faqs={faqs} updated={todaySA()}
@@ -23,6 +23,8 @@ const faqs = [
     <li><strong>Remove VAT:</strong> divide the VAT-inclusive price by 1.15. R1 150 ÷ 1.15 = R1 000.</li>
     <li><strong>VAT portion of an inclusive price:</strong> multiply by 15 and divide by 115.</li>
   </ul>
+  <h2>Worked example</h2>
+  <div class="example"><p>A supplier quotes <strong>R4 350 excluding VAT</strong>. VAT is R4 350 × 0.15 = R652.50, so you'll pay <strong>R5 002.50</strong>. If a till slip shows <strong>R2 300 including VAT</strong>, the price before VAT is R2 300 ÷ 1.15 = R2 000 and the VAT is R300.</p></div>
   <p>A common mistake is subtracting 15% from an inclusive price. That gives R977.50 instead of R1 000, because the 15% was added to the smaller, exclusive amount.</p>
-  <Related exclude="vat-calculator" />
+  <Related exclude="vat-calculator" answersFor="vat-calculator" />
 </Base>

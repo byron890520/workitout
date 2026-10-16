@@ -2,10 +2,12 @@
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { SalaryCalc } from "../components/Calculators.jsx";
-import { RATES, money } from "../lib/calc.js";
+import { RATES, money, salary } from "../lib/calc.js";
 import { toolSchema, todaySA } from "../lib/site.js";
 
 const ty = RATES.taxYear;
+const yr = "20" + ty.split("/")[1];
+const ex = salary({ monthlyGross: 25000 });
 const b = RATES.brackets;
 const r = RATES.rebates;
 const m = RATES.medCredit;
@@ -23,8 +25,8 @@ const faqs = [
   ["Does a raise push all my income into a higher bracket?", "No. South Africa uses marginal tax brackets, so only the portion of income above each threshold is taxed at the higher rate."],
 ];
 ---
-<Base title={`Salary After Tax Calculator South Africa ${ty} | Take-Home Pay`}
-  description={`Free SARS ${ty} salary calculator. See your take-home pay after PAYE, UIF, medical aid tax credits and pension contributions.`}
+<Base title={`SARS Income Tax Calculator ${yr} (${ty}) – Salary After Tax & Take-Home Pay`}
+  description={`Free SARS income tax calculator for the ${yr} tax year (${ty}). See your take-home pay after PAYE, UIF, medical aid tax credits and pension contributions.`}
   h1={`Salary after tax calculator (${ty})`}
   lede="Enter your monthly salary to see exactly what lands in your bank account after PAYE and UIF."
   trail={[["Home", "/"], ["Salary calculator", "/salary-calculator/"]]} faqs={faqs} updated={todaySA()}
@@ -36,9 +38,11 @@ const faqs = [
   <h3>SARS income tax brackets {ty} (1 March 2026 – 28 February 2027)</h3>
   <div class="table-scroll"><table><thead><tr><th>Taxable income per year</th><th>Tax</th></tr></thead>
     <tbody>{rows.map(([a, c]) => <tr><td>{a}</td><td>{c}</td></tr>)}</tbody></table></div>
+  <h3>Worked example: R25 000 a month</h3>
+  <div class="example"><p>R25 000 × 12 = {money(300000)} a year, which falls in the 26% bracket. Tax before rebates: {money(b[1][1])} + 26% × ({money(300000)} − {money(b[1][0])}) = {money(b[1][1] + 0.26 * (300000 - b[1][0]))}. Less the {money(r.primary)} primary rebate gives {money(ex.annualTax)} for the year, or <strong>{money(ex.paye)} PAYE a month</strong>. With UIF of R{ex.uif.toFixed(2)}, take-home pay is about <strong>{money(ex.net)}</strong>.</p></div>
   <h3>Rebates and medical tax credits</h3>
   <p>Everyone gets a primary rebate of {money(r.primary)} a year, which means you pay no income tax below about {threshold} a year if you're under 65. People 65 and older get an extra {money(r.secondary)}, and people 75 and older a further {money(r.tertiary)}. Medical aid members get a tax credit of R{m.first} a month for themselves, R{m.second} for the first dependant and R{m.additional} for each additional dependant.</p>
   <h3>UIF</h3>
   <p>UIF is 1% of your salary, capped at R{(RATES.uifCeiling * RATES.uifRate).toFixed(2)} a month because contributions only apply up to {money(RATES.uifCeiling)} of monthly pay.</p>
-  <Related exclude="salary-calculator" />
+  <Related exclude="salary-calculator" answersFor="salary-calculator" />
 </Base>

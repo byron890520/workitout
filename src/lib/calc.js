@@ -99,6 +99,60 @@ export function applianceCost(watts, hoursPerDay, ratePerKwh) {
   return { kwhDay, day, month: day * 30.4, year: day * 365 };
 }
 
+/** Works backwards from the take-home pay you want to the gross salary that delivers it. */
+export function grossFromNet({ net, age = 30, medicalMembers = 0, retirement = 0 }) {
+  const want = Math.max(0, +net || 0);
+  let lo = want, hi = want * 3 + 1000;
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    if (salary({ monthlyGross: mid, age, medicalMembers, retirement }).net < want) lo = mid; else hi = mid;
+  }
+  return salary({ monthlyGross: Math.round(hi * 100) / 100, age, medicalMembers, retirement });
+}
+
+/** Hourly rate to monthly and yearly pay (52 weeks a year), then after tax. */
+export function hourly({ rate, hoursPerDay = 8, daysPerWeek = 5, age = 30 }) {
+  const perWeek = Math.max(0, +rate || 0) * Math.max(0, +hoursPerDay || 0) * Math.max(0, +daysPerWeek || 0);
+  const annual = perWeek * 52;
+  const monthly = annual / 12;
+  return { perWeek, annual, monthly, ...salary({ monthlyGross: monthly, age }) };
+}
+
+/**
+ * Estimates a SARS refund (or amount owed) for the year from an IRP5 and the deductions/credits
+ * claimed on assessment: retirement annuity contributions paid privately and the additional
+ * medical expenses credit (s6B).
+ */
+export function taxRefund({ income, payePaid, age = 30, medicalMembers = 0, medicalContrib = 0, outOfPocket = 0, ra = 0 }) {
+  income = Math.max(0, +income || 0);
+  const raDeduct = Math.min(Math.max(0, +ra || 0), income * RATES.retirementCapPct, RATES.retirementCapAmount);
+  const taxable = Math.max(0, income - raDeduct);
+  const t = incomeTax(taxable, +age);
+  const mtc = medicalCredit(medicalMembers);
+  const contrib = Math.max(0, +medicalContrib || 0), oop = Math.max(0, +outOfPocket || 0);
+  let amtc = 0;
+  if (+age >= 65) amtc = (1 / 3) * Math.max(0, contrib - 3 * mtc) + (1 / 3) * oop;
+  else amtc = 0.25 * Math.max(0, contrib - 4 * mtc + oop - 0.075 * taxable);
+  const liability = Math.max(0, t.tax - mtc - amtc);
+  const paid = Math.max(0, +payePaid || 0);
+  return { raDeduct, taxable, liability, mtc, amtc, paid, refund: paid - liability, marginal: t.marginal };
+}
+
+/**
+ * Retirement annuity: the tax you save each year on contributions, the real monthly cost,
+ * and what the fund could grow to.
+ */
+export function retirementAnnuity({ monthly, income, age = 30, rate = 9, years = 25 }) {
+  monthly = Math.max(0, +monthly || 0);
+  income = Math.max(0, +income || 0);
+  const deduct = Math.min(monthly * 12, income * RATES.retirementCapPct, RATES.retirementCapAmount);
+  const before = incomeTax(income, +age).tax, after = incomeTax(income - deduct, +age).tax;
+  const saved = before - after;
+  const g = compound({ monthly, rate, years });
+  return { deduct, saved, savedMonthly: saved / 12, netCost: monthly - saved / 12, balance: g.balance, paid: g.paid, growth: g.interest,
+    capped: monthly * 12 > deduct, marginal: incomeTax(income, +age).marginal };
+}
+
 // Formatting shared by every calculator. Hand-rolled so the pre-built page and the browser
 // always show identical text (Intl output differs between Node and browsers): R 25 141.88
 function group(n, decimals) {

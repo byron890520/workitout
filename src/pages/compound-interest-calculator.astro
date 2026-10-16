@@ -3,6 +3,8 @@ import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
 import { CompoundCalc } from "../components/Calculators.jsx";
 import { toolSchema, todaySA } from "../lib/site.js";
+import { compound, money } from "../lib/calc.js";
+const ex = compound({ start: 10000, monthly: 1000, rate: 9, years: 20 });
 
 const faqs = [
   ["What is compound interest?", "It's interest on your interest. Each time interest is added, the next round is worked out on the bigger balance, so growth speeds up the longer you leave the money alone."],
@@ -11,7 +13,7 @@ const faqs = [
   ["Is tax taken into account?", "No. Interest above the annual exemption is taxable in South Africa, while growth inside a tax-free savings account is not. The results are also in today's rand before inflation."],
 ];
 ---
-<Base title="Compound Interest Calculator South Africa – Savings Growth"
+<Base title="Compound Interest Calculator South Africa (Rand) – Savings & Monthly Contributions"
   description="Free compound interest calculator in rand. See how a lump sum and monthly top-ups grow over time, with a year-by-year chart and table."
   h1="Compound interest calculator" lede="See what your savings could grow to, and how much of it is interest."
   trail={[["Home", "/"], ["Compound interest calculator", "/compound-interest-calculator/"]]} faqs={faqs} updated={todaySA()}
@@ -20,6 +22,8 @@ const faqs = [
   <h2>How compound interest works</h2>
   <p>Every time interest is added to your account, it becomes part of the balance that earns interest next time. Early on the growth looks small, but over 10, 20 or 30 years the interest starts doing most of the work. That's why starting early usually beats saving more later.</p>
   <p>The calculator adds your top-up at the end of each month and adds interest monthly, quarterly or yearly at the rate you choose. If you plan to raise your top-up each year, for example when you get an increase, set the yearly raise to see the effect.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>Start with <strong>R10 000</strong>, add <strong>R1 000 a month</strong> and earn <strong>9% a year</strong> compounded monthly. After 20 years you'll have about <strong>{money(ex.balance)}</strong>. You paid in {money(ex.paid)}; the other {money(ex.interest)} is interest.</p></div>
   <p class="notice">Results are estimates before tax, fees and inflation. Investment growth isn't guaranteed and can go down as well as up.</p>
-  <Related exclude="compound-interest-calculator" />
+  <Related exclude="compound-interest-calculator" answersFor="compound-interest-calculator" />
 </Base>

@@ -10,7 +10,7 @@ const faqs = [
   ["What uses the most electricity at home?", "Anything that heats: geysers, heaters, kettles, ovens and tumble dryers. A geyser is often the single biggest cost in a household."],
 ];
 ---
-<Base title="Prepaid Electricity Calculator SA – Units & Appliance Costs"
+<Base title="Prepaid Electricity Calculator South Africa 2026 – Units Per Rand & Appliance Costs"
   description="How many units will you get? Free prepaid electricity calculator for Eskom and municipal tariffs, plus the running cost of geysers, kettles, heaters and more."
   h1="Prepaid electricity calculator" lede="See how many units your money buys and what each appliance really costs to run."
   trail={[["Home", "/"], ["Electricity calculator", "/electricity-calculator/"]]} faqs={faqs} updated={todaySA()}
@@ -19,6 +19,8 @@ const faqs = [
   <h2>How prepaid electricity units are calculated</h2>
   <p>One prepaid unit is one kilowatt-hour (kWh). Divide the rand amount you spend by your price per kWh to get your units. At R2.71 per kWh, R500 buys about 184 units.</p>
   <p>To work out what an appliance costs, multiply its wattage by the hours you use it and divide by 1 000 to get kWh, then multiply by your rate. A 3 000 W geyser running for two hours uses 6 kWh a day.</p>
+  <h2>Worked example</h2>
+  <div class="example"><p>You buy <strong>R500</strong> of electricity at R2.71 per kWh: R500 ÷ R2.71 = <strong>184.5 units</strong>. A 3 000 W geyser heating for 2 hours a day uses 3 000 × 2 ÷ 1 000 = 6 kWh, which costs 6 × R2.71 = <strong>R16.26 a day</strong>, or about R494 a month. That one appliance would use most of the R500.</p></div>
   <p class="notice">Preset rates are approximate 2026/27 figures including VAT. Eskom direct tariffs change every April and municipal tariffs every July. Many municipalities use block tariffs, where the price per unit rises once you've bought a certain amount in a month, and some add a fixed monthly charge. The calculator doesn't include either.</p>
-  <Related exclude="electricity-calculator" />
+  <Related exclude="electricity-calculator" answersFor="electricity-calculator" />
 </Base>
