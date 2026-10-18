@@ -9,13 +9,13 @@ export function getStaticPaths() {
 }
 const { a } = Astro.props;
 const tool = TOOLS.find((t) => t.slug === a.tool);
-const today = updatedFor(`/answers/${a.slug}/`);
+const modified = updatedFor(`/answers/${a.slug}/`);
 const strip = (h) => h.replace(/<[^>]+>/g, "");
 ---
 <Base title={a.title} description={a.desc} h1={a.q}
   trail={[["Home", "/"], ["Answers", "/answers/"], [a.q, `/answers/${a.slug}/`]]} updated
   schema={{ "@type": "Article", headline: a.q, description: strip(a.desc), url: `${BASE}/answers/${a.slug}/`, inLanguage: "en-ZA",
-    dateModified: today, author: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" },
+    datePublished: "2026-10-16", dateModified: modified, author: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" },
     publisher: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" } }}>
   <p class="answer-short" set:html={a.short} />
   <a class="answer-cta" href={`/${tool.slug}/`}>
