@@ -38,5 +38,15 @@
     "example_af": "Die braaivleis was baie lekker.",
     "example_en": "The barbecue was really tasty.",
     "note": "A true South African favourite: say \"lekker!\" for anything great, and \"slaap lekker\" means sleep well."
+  },
+  {
+    "date": "2026-10-19",
+    "word": "verjaar",
+    "type_af": "werkwoord",
+    "type_en": "verb",
+    "meaning": "To have a birthday.",
+    "example_af": "My suster verjaar volgende week, so hou ons 'n partytjie.",
+    "example_en": "My sister has her birthday next week, so we're having a party.",
+    "note": "Afrikaans uses a verb for this: \"Wanneer verjaar jy?\" means \"When is your birthday?\""
   }
 ]
