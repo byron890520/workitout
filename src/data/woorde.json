@@ -48,5 +48,15 @@
     "example_af": "My suster verjaar volgende week, so hou ons 'n partytjie.",
     "example_en": "My sister has her birthday next week, so we're having a party.",
     "note": "Afrikaans uses a verb for this: \"Wanneer verjaar jy?\" means \"When is your birthday?\""
+  },
+  {
+    "date": "2026-10-20",
+    "word": "eina",
+    "type_af": "uitdrukking",
+    "type_en": "expression",
+    "meaning": "Ouch! – what you say when something hurts.",
+    "example_af": "Eina! Ek het my toon teen die tafel gestamp.",
+    "example_en": "Ouch! I stubbed my toe against the table.",
+    "note": "A proudly South African word, also used in English here; \"Dit is eina\" means \"That's sore\"."
   }
 ]
