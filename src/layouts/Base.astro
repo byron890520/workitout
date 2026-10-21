@@ -3,7 +3,7 @@ import "@fontsource-variable/bricolage-grotesque/opsz.css";
 import "@fontsource/atkinson-hyperlegible/latin-400.css";
 import "@fontsource/atkinson-hyperlegible/latin-700.css";
 import "../styles/global.css";
-import ToolsMenu from "../components/ToolsMenu.jsx";
+import ToolsMenu from "../components/ToolsMenu.astro";
 import MathTrail from "../components/MathTrail.astro";
 import { CONFIG, DEMO, BASE, TOOLS, GROUPS, glyphFor, updatedFor } from "../lib/site.js";
 
@@ -67,7 +67,27 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {CONFIG.google_site_verification && <meta name="google-site-verification" content={CONFIG.google_site_verification}>}
 {CONFIG.adsense_client && !DEMO && <meta name="google-adsense-account" content={CONFIG.adsense_client}>}
-{CONFIG.adsense_client && !DEMO && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CONFIG.adsense_client}`} crossorigin="anonymous"></script>}
+{CONFIG.adsense_client && !DEMO && <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>}
+{CONFIG.adsense_client && !DEMO && (
+  <script is:inline define:vars={{ adClient: CONFIG.adsense_client }}>
+    // Load AdSense after the page has appeared: on the visitor's first scroll, tap or key press,
+    // or 3 seconds after the page finishes loading, whichever comes first. Keeps ads off the critical path.
+    (function () {
+      var done = false, evs = ["scroll", "pointerdown", "keydown", "touchstart"];
+      function load() {
+        if (done) return; done = true;
+        evs.forEach(function (e) { removeEventListener(e, load); });
+        var s = document.createElement("script");
+        s.async = true; s.crossOrigin = "anonymous";
+        s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + adClient;
+        document.head.appendChild(s);
+      }
+      evs.forEach(function (e) { addEventListener(e, load, { once: true, passive: true }); });
+      if (document.readyState === "complete") setTimeout(load, 3000);
+      else addEventListener("load", function () { setTimeout(load, 3000); });
+    })();
+  </script>
+)}
 {ld && <script type="application/ld+json" set:html={ld}></script>}
 </head>
 <body>
@@ -75,7 +95,7 @@ const menuItems = TOOLS.map((t) => ({ href: `/${t.slug}/`, title: t.title, desc:
 <a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
   <a class="logo" href="/"><span class="mark" aria-hidden="true">W</span>{CONFIG.brand}</a>
-  <ToolsMenu client:load items={menuItems} groups={GROUPS} current={path} />
+  <ToolsMenu items={menuItems} groups={GROUPS} current={path} />
 </div></header>
 <main id="main">
   {hasHero ? <slot name="hero" /> : (

@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Keypad from "../components/Keypad.astro";
-import TileBoard from "../components/TileBoard.jsx";
+import TileBoard from "../components/TileBoard.astro";
 import Intro from "../components/Intro.astro";
 import { CONFIG, BASE, TOOLS, DEMO } from "../lib/site.js";
 
@@ -22,7 +22,7 @@ const items = TOOLS.map((t) => ({ href: `/${t.slug}/`, ...t }));
         <a class="btn btn-ghost" href="/word-hints/">Get today's word hint</a>
       </div>
     </div>
-    <TileBoard client:visible />
+    <TileBoard />
   </div></section>
 
   <section class="pick" data-reveal aria-labelledby="pick-h">

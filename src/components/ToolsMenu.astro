@@ -1,0 +1,116 @@
+---
+// "Tools" button in the header. Opens a panel with the tools in three groups:
+// side-by-side columns on wide screens, tap-to-switch tabs on phones (so no list is long).
+// Every link is in the pre-built HTML (hidden until opened), so Google still follows them.
+// Plain JavaScript (no React), so pages without a calculator don't load React at all.
+const { items, groups, current } = Astro.props;
+const home = groups.find((g) => items.some((it) => it.group === g.id && current.startsWith(it.href)))?.id ?? groups[0].id;
+const homeIndex = groups.findIndex((g) => g.id === home);
+---
+<div class="tools-menu" data-home={home}>
+  <button type="button" class="tools-btn" aria-expanded="false" aria-controls="tools-panel">
+    <span class="tools-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    Tools
+    <svg class="chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z" /></svg>
+  </button>
+  <div class="tools-panel" id="tools-panel" inert>
+    <div class="tools-tabs" role="tablist" aria-label="Tool groups">
+      {groups.map((g) => (
+        <button type="button" role="tab" id={`tt-${g.id}`} aria-controls={`tg-${g.id}`} data-group={g.id}
+          aria-selected={g.id === home ? "true" : "false"} tabindex={g.id === home ? 0 : -1}>
+          {g.label}<span class="n">{items.filter((it) => it.group === g.id).length}</span>
+        </button>
+      ))}
+      <span class="tools-tab-ink" aria-hidden="true" style={`--i:${homeIndex}`}></span>
+    </div>
+    <div class="tools-groups">
+      {groups.map((g) => (
+        <section class={"tools-group" + (g.id === home ? " active" : "")} id={`tg-${g.id}`} role="tabpanel" aria-labelledby={`tt-${g.id}`}>
+          <h2 class="tools-group-h">{g.label}</h2>
+          <ul>
+            {items.filter((it) => it.group === g.id).map((it, i) => {
+              const here = current.startsWith(it.href);
+              return (
+                <li style={`--n:${i}`}>
+                  <a href={it.href} aria-current={here ? "page" : undefined}>
+                    <span class={`key ${it.alt ? "alt" : ""}`} aria-hidden="true">{it.glyph}</span>
+                    <span class="txt"><strong>{it.title}</strong><span class="d">{it.desc}</span></span>
+                    {here && <span class="here">Here</span>}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </div>
+  <div class="tools-scrim" aria-hidden="true"></div>
+</div>
+
+<script>
+  for (const wrap of document.querySelectorAll<HTMLElement>(".tools-menu")) {
+    const btn = wrap.querySelector<HTMLButtonElement>(".tools-btn")!;
+    const panel = wrap.querySelector<HTMLElement>(".tools-panel")!;
+    const tabs = [...wrap.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const sections = [...wrap.querySelectorAll<HTMLElement>(".tools-group")];
+    const ink = wrap.querySelector<HTMLElement>(".tools-tab-ink")!;
+    const home = wrap.dataset.home!;
+    let open = false;
+
+    // Only links you can actually see (on phones, the open tab's).
+    const visibleLinks = () => [...panel.querySelectorAll<HTMLAnchorElement>(".tools-group a")].filter((a) => a.offsetParent !== null);
+
+    const setTab = (id: string) => {
+      tabs.forEach((t, i) => {
+        const on = t.dataset.group === id;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) ink.style.setProperty("--i", String(i));
+      });
+      sections.forEach((s) => s.classList.toggle("active", s.id === `tg-${id}`));
+    };
+
+    const setOpen = (value: boolean) => {
+      open = value;
+      wrap.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      panel.inert = !open;
+    };
+
+    btn.addEventListener("click", (e) => {
+      const opening = !open;
+      if (opening) setTab(home);
+      setOpen(opening);
+      // Keyboard users land on the first tool; mouse and touch users keep their place.
+      if (opening && e.detail === 0) setTimeout(() => visibleLinks()[0]?.focus(), 60);
+    });
+
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => setTab(t.dataset.group!));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        e.preventDefault();
+        const n = (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        setTab(tabs[n].dataset.group!);
+        tabs[n].focus();
+      });
+    });
+
+    panel.querySelectorAll(".tools-group a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+
+    document.addEventListener("pointerdown", (e) => {
+      if (open && !wrap.contains(e.target as Node)) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (!open) return;
+      if (e.key === "Escape") { setOpen(false); btn.focus(); return; }
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      const links = visibleLinks();
+      const i = links.indexOf(document.activeElement as HTMLAnchorElement);
+      e.preventDefault();
+      const next = e.key === "ArrowDown" ? (i + 1) % links.length : (i - 1 + links.length) % links.length;
+      links[next]?.focus();
+    });
+  }
+</script>
