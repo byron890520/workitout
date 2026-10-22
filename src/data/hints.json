@@ -47,5 +47,12 @@
     "answer": "PENNY",
     "clue": "A small copper coin worth just one cent, the kind of loose change you'd find down the back of the couch; when it finally drops, you suddenly get the joke.",
     "number": 1950
+  },
+  {
+    "game": "wordle",
+    "date": "2026-10-22",
+    "answer": "RESET",
+    "clue": "To start over from scratch, like flicking the router off and on again once the power comes back after load-shedding.",
+    "number": 1951
   }
 ]
