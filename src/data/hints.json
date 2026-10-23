@@ -54,5 +54,12 @@
     "answer": "RESET",
     "clue": "To start over from scratch, like flicking the router off and on again once the power comes back after load-shedding.",
     "number": 1951
+  },
+  {
+    "game": "wordle",
+    "date": "2026-10-23",
+    "answer": "TRILL",
+    "clue": "A quick, quivering warble between two neighbouring notes, like a Cape robin-chat greeting the morning from the garden hedge.",
+    "number": 1952
   }
 ]
