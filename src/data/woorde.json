@@ -78,5 +78,15 @@
     "example_af": "Ek is so moeg ná die lang dag by die werk.",
     "example_en": "I'm so tired after the long day at work.",
     "note": "Use \"moeg vir\" to say you're fed up with something, e.g. \"Ek is moeg vir die reën\" (I'm tired of the rain)."
+  },
+  {
+    "date": "2026-10-23",
+    "word": "stadig",
+    "type_af": "bywoord",
+    "type_en": "adverb",
+    "meaning": "Slowly, or at a slow pace.",
+    "example_af": "Ry asseblief stadig, want die pad is nat.",
+    "example_en": "Please drive slowly, because the road is wet.",
+    "note": "Also used as an adjective (\"'n stadige trein\" – a slow train); \"stadig maar seker\" means slowly but surely."
   }
 ]
