@@ -15,7 +15,10 @@ const bracketFor = (taxable) => {
 };
 
 /* ---------- "How much tax on R__ a month?" ---------- */
-const salaryAmounts = [10000, 15000, 20000, 25000, 30000, 40000, 50000, 75000, 100000];
+// Every common monthly salary gets its own page: R1 000 steps to R30 000, then wider steps.
+const range = (from, to, step) => Array.from({ length: Math.floor((to - from) / step) + 1 }, (_, i) => from + i * step);
+export const salaryAmounts = [...range(5000, 30000, 1000), ...range(32500, 50000, 2500), ...range(55000, 100000, 5000), 120000, 150000];
+export const salarySlug = (a) => `tax-on-r${a}-a-month`;
 const salaryPage = (a) => {
   const s = salary({ monthlyGross: a });
   const annual = a * 12;
@@ -25,11 +28,12 @@ const salaryPage = (a) => {
   const med3 = salary({ monthlyGross: a, medicalMembers: 3 });
   const old = salary({ monthlyGross: a, age: 65 });
   const pen = salary({ monthlyGross: a, retirement: Math.round(a * 0.075) });
-  const near = [a - 5000, a, a + 5000].filter((x) => x > 0).map((x) => salary({ monthlyGross: x }));
+  const at = salaryAmounts.indexOf(a);
+  const near = salaryAmounts.slice(Math.max(0, at - 2), at + 3).map((x) => salary({ monthlyGross: x }));
   const words = money(a);
   return {
-    slug: `tax-on-r${a}-a-month`,
-    group: "Salary and PAYE", tool: "salary-calculator",
+    slug: salarySlug(a), published: [10000, 15000, 20000, 25000, 30000, 40000, 50000, 75000, 100000].includes(a) ? "2026-10-16" : "2026-10-25",
+    group: "Take-home pay by salary", tool: "salary-calculator",
     q: `How much tax do I pay on ${words} a month?`,
     title: `Tax on ${words} a Month in South Africa (${yr}) – Take-Home Pay`,
     desc: `On ${words} a month you pay about ${money(s.paye)} PAYE and ${R2(s.uif)} UIF, so you take home about ${money(s.net)}. Full ${ty} SARS breakdown.`,
@@ -54,7 +58,9 @@ const salaryPage = (a) => {
         ["Aged 65 to 74", R2(old.paye), R2(old.net)],
         [`Paying 7.5% (${money(Math.round(a * 0.075))}) into a pension`, R2(pen.paye), R2(pen.net)],
       ]) + `<p>Medical aid gives you a tax credit; it doesn't include what you pay the medical scheme, which comes off your pay separately. A pension contribution lowers your tax, but the contribution itself also leaves your pay, which is why take-home drops.</p>` },
-      { h: "Nearby salaries", html: table(["Gross per month", "PAYE", "Take-home"], near.map((x) => [money(x.gross), R2(x.paye), R2(x.net)])) },
+      { h: "Nearby salaries", html: table(["Gross per month", "PAYE", "Take-home"], near.map((x) => x.gross === a
+        ? [`<strong>${money(x.gross)}</strong>`, `<strong>${R2(x.paye)}</strong>`, `<strong>${R2(x.net)}</strong>`]
+        : [`<a href="/answers/${salarySlug(x.gross)}/">${money(x.gross)}</a>`, R2(x.paye), R2(x.net)])) },
     ],
   };
 };
@@ -206,7 +212,7 @@ const others = [
 // Keep "R240 000" on one line wherever it lands.
 const nb = (h) => h.replace(/R\d{1,3}(?: \d{3})+/g, (m) => m.replace(/ /g, "\u00a0"));
 export const ANSWERS = [...salaryAmounts.map(salaryPage), ...others].map((a) => ({
-  ...a, short: nb(a.short), sections: a.sections.map((x) => ({ ...x, html: nb(x.html) })),
+  ...a, q: nb(a.q), short: nb(a.short), sections: a.sections.map((x) => ({ ...x, html: nb(x.html) })),
 }));
 export const answer = (slug) => ANSWERS.find((a) => a.slug === slug);
 export const answersFor = (tool) => ANSWERS.filter((a) => a.tool === tool);

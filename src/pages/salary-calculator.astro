@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import SalaryTable from "../components/SalaryTable.astro";
 import Related from "../components/Related.astro";
 import { SalaryCalc } from "../components/Calculators.jsx";
 import { RATES, money, salary } from "../lib/calc.js";
@@ -40,6 +41,8 @@ const faqs = [
     <tbody>{rows.map(([a, c]) => <tr><td>{a}</td><td>{c}</td></tr>)}</tbody></table></div>
   <h3>Worked example: R25 000 a month</h3>
   <div class="example"><p>R25 000 × 12 = {money(300000)} a year, which falls in the 26% bracket. Tax before rebates: {money(b[1][1])} + 26% × ({money(300000)} − {money(b[1][0])}) = {money(b[1][1] + 0.26 * (300000 - b[1][0]))}. Less the {money(r.primary)} primary rebate gives {money(ex.annualTax)} for the year, or <strong>{money(ex.paye)} PAYE a month</strong>. With UIF of R{ex.uif.toFixed(2)}, take-home pay is about <strong>{money(ex.net)}</strong>.</p></div>
+  <h3>Take-home pay at common salaries</h3>
+  <SalaryTable />
   <h3>Rebates and medical tax credits</h3>
   <p>Everyone gets a primary rebate of {money(r.primary)} a year, which means you pay no income tax below about {threshold} a year if you're under 65. People 65 and older get an extra {money(r.secondary)}, and people 75 and older a further {money(r.tertiary)}. Medical aid members get a tax credit of R{m.first} a month for themselves, R{m.second} for the first dependant and R{m.additional} for each additional dependant.</p>
   <h3>UIF</h3>

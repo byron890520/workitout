@@ -413,3 +413,9 @@ body.embed .peek{display:none}
 .embed-item textarea{width:100%;box-sizing:border-box;margin:14px 0 10px;font:13px/1.45 ui-monospace,Menlo,monospace;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);resize:vertical}
 .embed-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .table-scroll td+td,.table-scroll th+th{white-space:nowrap}
+.salary-table{margin:12px 0 24px}
+.salary-table summary{cursor:pointer;font-weight:700;padding:12px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
+.salary-table summary:hover{border-color:var(--fynbos)}
+.salary-table[open] summary{margin-bottom:12px}
+.salary-table td:first-child a{font-weight:700}
+.salary-table td{white-space:nowrap}

@@ -1,0 +1,17 @@
+---
+// Take-home pay at every common salary, each linking to its own worked answer page.
+import { salary, money } from "../lib/calc.js";
+import { salaryAmounts, salarySlug } from "../lib/answers.js";
+const { open = false } = Astro.props;
+const rows = salaryAmounts.map((a) => ({ a, s: salary({ monthlyGross: a }) }));
+---
+<details class="salary-table" open={open}>
+  <summary>Take-home pay at every salary, from {money(salaryAmounts[0])} to {money(salaryAmounts.at(-1))} a month</summary>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Salary</th><th>PAYE</th><th>Take-home</th></tr></thead>
+    <tbody>{rows.map(({ a, s }) => (
+      <tr><td><a href={`/answers/${salarySlug(a)}/`}>{money(a)}</a></td><td>{money(s.paye)}</td><td>{money(s.net)}</td></tr>
+    ))}</tbody>
+  </table></div>
+  <p class="hint">Per month, after PAYE and 1% UIF. Under 65, no medical aid or pension deductions. Tap a salary for the full working.</p>
+</details>

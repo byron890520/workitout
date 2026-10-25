@@ -15,7 +15,7 @@ const strip = (h) => h.replace(/<[^>]+>/g, "");
 <Base title={a.title} description={a.desc} h1={a.q}
   trail={[["Home", "/"], ["Answers", "/answers/"], [a.q, `/answers/${a.slug}/`]]} updated
   schema={{ "@type": "Article", headline: a.q, description: strip(a.desc), url: `${BASE}/answers/${a.slug}/`, inLanguage: "en-ZA",
-    datePublished: "2026-10-16", dateModified: modified, author: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" },
+    datePublished: a.published || "2026-10-16", dateModified: modified, author: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" },
     publisher: { "@type": "Organization", name: CONFIG.brand, url: BASE + "/" } }}>
   <p class="answer-short" set:html={a.short} />
   <a class="answer-cta" href={`/${tool.slug}/`}>
