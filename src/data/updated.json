@@ -15,7 +15,7 @@
   "/vat-calculator/": "2026-10-16",
   "/compound-interest-calculator/": "2026-10-16",
   "/electricity-calculator/": "2026-10-16",
-  "/transfer-duty-calculator/": "2026-10-16",
+  "/transfer-duty-calculator/": "2026-10-25",
   "/free-calculators-for-your-website/": "2026-10-16",
   "/answers/tax-on-r5000-a-month/": "2026-10-25",
   "/answers/tax-on-r6000-a-month/": "2026-10-25",
@@ -53,5 +53,18 @@
   "/answers/tax-on-r90000-a-month/": "2026-10-25",
   "/answers/tax-on-r95000-a-month/": "2026-10-25",
   "/answers/tax-on-r120000-a-month/": "2026-10-25",
-  "/answers/tax-on-r150000-a-month/": "2026-10-25"
+  "/answers/tax-on-r150000-a-month/": "2026-10-25",
+  "/answers/transfer-duty-on-r1-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r1-5-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r2-5-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r3-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r3-5-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r4-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r4-5-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r5-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r6-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r7-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r8-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r9-million/": "2026-10-25",
+  "/answers/transfer-duty-on-r10-million/": "2026-10-25"
 }

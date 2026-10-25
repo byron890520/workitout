@@ -3,10 +3,12 @@
 import { salary, money } from "../lib/calc.js";
 import { salaryAmounts, salarySlug } from "../lib/answers.js";
 const { open = false } = Astro.props;
+const nb = (x) => x.replace(/ /g, "\u00a0");
 const rows = salaryAmounts.map((a) => ({ a, s: salary({ monthlyGross: a }) }));
+const eg = salary({ monthlyGross: 25000 });
 ---
 <details class="salary-table" open={open}>
-  <summary>Take-home pay at every salary, from {money(salaryAmounts[0])} to {money(salaryAmounts.at(-1))} a month</summary>
+  <summary><span>R25 000 a month: <strong>{nb(money(eg.net))}</strong> take-home</span><span class="more">More salaries</span></summary>
   <div class="table-scroll"><table>
     <thead><tr><th>Salary</th><th>PAYE</th><th>Take-home</th></tr></thead>
     <tbody>{rows.map(({ a, s }) => (

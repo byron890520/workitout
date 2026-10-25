@@ -6,9 +6,14 @@ const { exclude, answersFor, current } = Astro.props;
 const items = TOOLS.filter((t) => t.slug !== exclude).map((t) => ({ href: `/${t.slug}/`, ...t }));
 // Answers for this tool first, then fill up to six from the rest so every page links deeper.
 // Topic answers come before salary-amount pages; salary pages closest to this page's amount first.
-const amt = (slug = "") => +(slug.match(/^tax-on-r(\d+)-a-month$/)?.[1] ?? NaN);
+const amt = (slug = "") => {
+  const sal = slug.match(/^tax-on-r(\d+)-a-month$/);
+  if (sal) return +sal[1];
+  const duty = slug.match(/^transfer-duty-on-r([\d-]+)-million$/);
+  return duty ? +duty[1].replace("-", ".") * 1e6 : NaN;
+};
 const here = amt(current);
-const popular = [20000, 25000, 30000, 15000, 40000, 10000, 50000];
+const popular = [20000, 25000, 30000, 15000, 40000, 10000, 50000, 2000000, 1500000, 3000000, 2500000];
 const rank = (a) => {
   const n = amt(a.slug);
   if (isNaN(n)) return -1;

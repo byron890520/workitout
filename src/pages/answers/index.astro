@@ -4,6 +4,7 @@ import { ANSWERS, GROUPS } from "../../lib/answers.js";
 import { BASE } from "../../lib/site.js";
 import Related from "../../components/Related.astro";
 import SalaryTable from "../../components/SalaryTable.astro";
+import DutyTable from "../../components/DutyTable.astro";
 ---
 <Base title="South African Tax & Money Answers (2026/27) – PAYE, UIF, VAT, Transfer Duty"
   description="Quick, worked answers to common South African tax and money questions: tax on your salary, the tax threshold, UIF, medical credits, VAT, transfer duty and saving."
@@ -14,7 +15,7 @@ import SalaryTable from "../../components/SalaryTable.astro";
   {GROUPS.map((g) => (
     <section class="answer-group">
       <h2>{g}</h2>
-      {g === "Take-home pay by salary" ? <SalaryTable open /> : (
+      {g === "Take-home pay by salary" ? <SalaryTable /> : g === "Transfer duty by price" ? <DutyTable /> : (
         <ul class="answer-list">
           {ANSWERS.filter((a) => a.group === g).map((a) => <li><a href={`/answers/${a.slug}/`}>{a.q}</a></li>)}
         </ul>

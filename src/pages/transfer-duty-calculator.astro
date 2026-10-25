@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Related from "../components/Related.astro";
+import DutyTable from "../components/DutyTable.astro";
 import { TransferDutyCalc } from "../components/Calculators.jsx";
 import { RATES, money, transferDuty } from "../lib/calc.js";
 import { toolSchema } from "../lib/site.js";
@@ -32,6 +33,8 @@ const faqs = [
   <p>Transfer duty is often called bond transfer duty because it's paid when you buy a home, usually with a bond. It's a SARS tax on the transfer of the property itself, so you pay it whether or not you take out a bond.</p>
   <div class="table-scroll brackets"><table><thead><tr><th>Property value</th><th>Transfer duty</th></tr></thead>
     <tbody>{rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table></div>
+  <h2>Transfer duty at common prices</h2>
+  <DutyTable />
   <h2>Worked example</h2>
   <div class="example"><p>You buy a house for <strong>R2 500 000</strong>. That falls in the 8% band above {money(t[3][0])}: {money(t[3][1])} + 8% × (R2 500 000 − {money(t[3][0])}) = <strong>{money(ex)}</strong> transfer duty, about {(ex / 25000).toFixed(1)}% of the price.</p></div>
   <p>The buyer pays transfer duty, usually through the conveyancing attorney before the property is registered in their name. Remember to budget separately for conveyancing fees, bond registration costs and Deeds Office fees, which this calculator doesn't include.</p>

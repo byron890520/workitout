@@ -1,0 +1,17 @@
+---
+// Transfer duty at common property prices, each linking to its own worked answer page.
+import { transferDuty, money, pct } from "../lib/calc.js";
+import { dutyPrices, dutySlug } from "../lib/answers.js";
+const { open = false } = Astro.props;
+const nb = (x) => x.replace(/ /g, "\u00a0");
+---
+<details class="salary-table" open={open}>
+  <summary><span>A R2 million house: <strong>{nb(money(transferDuty(2000000)))}</strong> transfer duty</span><span class="more">More prices</span></summary>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Price</th><th>Duty</th><th>% of price</th></tr></thead>
+    <tbody>{dutyPrices.map((p) => (
+      <tr><td><a href={`/answers/${dutySlug(p)}/`}>{money(p)}</a></td><td>{money(transferDuty(p))}</td><td>{pct(transferDuty(p) / p)}</td></tr>
+    ))}</tbody>
+  </table></div>
+  <p class="hint">Tap a price for the full working. Not payable when buying from a VAT-registered seller.</p>
+</details>

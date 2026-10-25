@@ -175,17 +175,6 @@ const others = [
     ],
   },
   {
-    slug: "transfer-duty-on-r2-million", group: "Property", tool: "transfer-duty-calculator",
-    q: "How much is transfer duty on a R2 million house?",
-    title: `Transfer Duty on a R2 Million House (${yr})`,
-    desc: `Transfer duty on a R2 000 000 property is ${money(transferDuty(2000000))} for ${ty}. See how it's calculated and what it is at R1.5m and R2.5m.`,
-    short: `Transfer duty on a <strong>R2 000 000</strong> property is <strong>${money(transferDuty(2000000))}</strong> for the ${ty} tax year, about ${pct(transferDuty(2000000) / 2000000)} of the price.`,
-    sections: [
-      { h: "How it's worked out", html: `<p>R2 000 000 falls in the band from ${money(RATES.transferDuty[2][0] + 1)} to ${money(RATES.transferDuty[3][0])}: ${money(RATES.transferDuty[2][1])} + 6% × (R2 000 000 − ${money(RATES.transferDuty[2][0])}) = <strong>${money(transferDuty(2000000))}</strong>.</p>` },
-      { h: "Nearby prices", html: table(["Purchase price", "Transfer duty"], [1500000, 1800000, 2000000, 2200000, 2500000].map((p) => [money(p), money(transferDuty(p))])) },
-    ],
-  },
-  {
     slug: "r1000-a-month-invested", group: "Saving and investing", tool: "compound-interest-calculator",
     q: "What does R1 000 a month grow to?",
     title: "What Does R1 000 a Month Grow To? (10, 20 and 30 Years)",
@@ -210,8 +199,50 @@ const others = [
 ];
 
 // Keep "R240 000" on one line wherever it lands.
+/* ---------- "Transfer duty on a R__ million house" ---------- */
+// Every R1 million from R1m to R10m, plus the half-millions up to R5m that people search for most.
+export const dutyPrices = [1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000];
+const mil = (p) => String(p / 1e6);
+export const dutySlug = (p) => `transfer-duty-on-r${mil(p).replace(".", "-")}-million`;
+const dutyPage = (p) => {
+  const d = transferDuty(p);
+  const bands = RATES.transferDuty;
+  let i = 0;
+  for (let k = 0; k < bands.length; k++) if (p > bands[k][0]) i = k;
+  const [lo, base, rate] = bands[i];
+  const next = bands[i + 1];
+  const words = money(p);
+  const at = dutyPrices.indexOf(p);
+  const near = dutyPrices.slice(Math.max(0, at - 2), at + 3);
+  const working = rate === 0
+    ? `<p>${words} is at or below the ${money(bands[1][0])} threshold, so <strong>no transfer duty</strong> is payable.</p>`
+    : `<p>${words} falls in the ${pct(rate)} band, from ${money(lo + 1)}${next ? ` to ${money(next[0])}` : " upwards"}:</p><p>${base ? `${money(base)} + ` : ""}${pct(rate)} × (${words} − ${money(lo)}) = <strong>${money(d)}</strong>.</p>`;
+  return {
+    slug: dutySlug(p), published: p === 2000000 ? "2026-10-16" : "2026-10-25",
+    group: "Transfer duty by price", tool: "transfer-duty-calculator",
+    q: `How much is transfer duty on a R${mil(p)} million house?`,
+    title: d ? `Transfer Duty on a R${mil(p)} Million House (${yr}) – ${money(d)}` : `Transfer Duty on a R${mil(p)} Million House (${yr}) – None Payable`,
+    desc: d
+      ? `Transfer duty on a ${words} property is ${money(d)} for ${ty}, about ${pct(d / p)} of the price. See the SARS working and nearby prices.`
+      : `There is no transfer duty on a ${words} property for ${ty}, because it's below the ${money(bands[1][0])} threshold. See what duty starts at above that.`,
+    short: d
+      ? `Transfer duty on a <strong>${words}</strong> property is <strong>${money(d)}</strong> for the ${ty} tax year, about ${pct(d / p)} of the price. The buyer pays it to SARS through the conveyancer.`
+      : `There's <strong>no transfer duty</strong> on a <strong>${words}</strong> property for the ${ty} tax year, because duty only applies above ${money(bands[1][0])}.`,
+    sections: [
+      { h: "How it's worked out", html: working },
+      { h: "Nearby prices", html: table(["Purchase price", "Transfer duty", "% of price"], near.map((x) => {
+        const dx = transferDuty(x);
+        return x === p
+          ? [`<strong>${money(x)}</strong>`, `<strong>${money(dx)}</strong>`, `<strong>${pct(dx / x)}</strong>`]
+          : [`<a href="/answers/${dutySlug(x)}/">${money(x)}</a>`, money(dx), pct(dx / x)];
+      })) },
+      { h: "Good to know", html: `<p>Transfer duty is a once-off SARS tax paid by the buyer before the property is registered in your name. It's usually paid in cash and can't be added to your home loan. If you buy from a VAT-registered seller, such as a developer, VAT is included in the price instead and no transfer duty is payable. Conveyancing and bond registration fees are extra.</p>` },
+    ],
+  };
+};
+
 const nb = (h) => h.replace(/R\d{1,3}(?: \d{3})+/g, (m) => m.replace(/ /g, "\u00a0"));
-export const ANSWERS = [...salaryAmounts.map(salaryPage), ...others].map((a) => ({
+export const ANSWERS = [...salaryAmounts.map(salaryPage), ...dutyPrices.map(dutyPage), ...others].map((a) => ({
   ...a, q: nb(a.q), short: nb(a.short), sections: a.sections.map((x) => ({ ...x, html: nb(x.html) })),
 }));
 export const answer = (slug) => ANSWERS.find((a) => a.slug === slug);
