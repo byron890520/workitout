@@ -419,3 +419,6 @@ body.embed .peek{display:none}
 .salary-table[open] summary{margin-bottom:12px}
 .salary-table td:first-child a{font-weight:700}
 .salary-table td{white-space:nowrap}
+/* Bracket tables: let the long tax column wrap instead of running off a phone screen. */
+.brackets td+td,.brackets th+th{white-space:normal}
+.brackets td:first-child{min-width:7.5em}

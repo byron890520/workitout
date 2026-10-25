@@ -6,11 +6,12 @@ import { RATES, money, transferDuty } from "../lib/calc.js";
 import { toolSchema } from "../lib/site.js";
 
 const t = RATES.transferDuty;
+const nb = (x) => x.replace(/R\d{1,3}(?: \d{3})+/g, (m) => m.replace(/ /g, "\u00a0"));
 const rows = t.map(([lo, base, rate], i) => {
   const next = t[i + 1];
   const range = i === 0 ? `Up to ${money(next[0])}` : next ? `${money(lo)} – ${money(next[0])}` : `Above ${money(lo)}`;
   const duty = rate === 0 ? "No duty" : base === 0 ? `${Math.round(rate * 100)}% of the value above ${money(lo)}` : `${money(base)} + ${Math.round(rate * 100)}% of the value above ${money(lo)}`;
-  return [range, duty];
+  return [nb(range), nb(duty)];
 });
 const ty = RATES.taxYear;
 const yr = "20" + ty.split("/")[1];
@@ -29,7 +30,7 @@ const faqs = [
   <TransferDutyCalc client:load />
   <h2>Transfer duty rates ({ty})</h2>
   <p>Transfer duty is often called bond transfer duty because it's paid when you buy a home, usually with a bond. It's a SARS tax on the transfer of the property itself, so you pay it whether or not you take out a bond.</p>
-  <div class="table-scroll"><table><thead><tr><th>Property value</th><th>Transfer duty</th></tr></thead>
+  <div class="table-scroll brackets"><table><thead><tr><th>Property value</th><th>Transfer duty</th></tr></thead>
     <tbody>{rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table></div>
   <h2>Worked example</h2>
   <div class="example"><p>You buy a house for <strong>R2 500 000</strong>. That falls in the 8% band above {money(t[3][0])}: {money(t[3][1])} + 8% × (R2 500 000 − {money(t[3][0])}) = <strong>{money(ex)}</strong> transfer duty, about {(ex / 25000).toFixed(1)}% of the price.</p></div>
