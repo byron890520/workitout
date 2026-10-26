@@ -108,5 +108,15 @@
     "example_af": "Daar is 'n gogga in my koffie!",
     "example_en": "There's a bug in my coffee!",
     "note": "South Africans use gogga in English too; the plural is goggas and a tiny one is a goggatjie."
+  },
+  {
+    "date": "2026-10-26",
+    "word": "glimlag",
+    "type_af": "werkwoord",
+    "type_en": "verb",
+    "meaning": "To smile.",
+    "example_af": "Sy glimlag altyd wanneer sy haar hond sien.",
+    "example_en": "She always smiles when she sees her dog.",
+    "note": "The past tense is het geglimlag, and the same word is also a noun: 'n glimlag means a smile."
   }
 ]
