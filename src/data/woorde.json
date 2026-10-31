@@ -158,5 +158,15 @@
     "example_af": "Moenie vergeet om jou sambreel saam te neem nie.",
     "example_en": "Don't forget to take your umbrella with you.",
     "note": "Verbs starting with ver- don't take ge- in the past tense: ek het vergeet (I forgot)."
+  },
+  {
+    "date": "2026-10-31",
+    "word": "spook",
+    "type_af": "selfstandige naamwoord",
+    "type_en": "noun",
+    "meaning": "A ghost; the spirit of a dead person said to appear to the living.",
+    "example_af": "Die kinders sê daar is 'n spook in die ou huis op die plaas.",
+    "example_en": "The children say there's a ghost in the old house on the farm.",
+    "note": "The plural is spoke; as a verb, spook can also mean to struggle, as in ek spook met my huiswerk (I'm struggling with my homework)."
   }
 ]
