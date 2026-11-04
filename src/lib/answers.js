@@ -84,7 +84,7 @@ const others = [
   {
     slug: "tax-threshold-south-africa", group: "Salary and PAYE", tool: "salary-calculator",
     q: `What is the tax threshold in South Africa for ${yr}?`,
-    title: `Tax Threshold South Africa ${yr} (${ty}) – How Much Can You Earn Tax-Free?`,
+    title: `Tax Threshold South Africa ${yr} – How Much Is Tax-Free?`,
     desc: `For the ${ty} tax year you pay no income tax below ${money(threshold)} a year if you're under 65, ${money(t65)} if 65 to 74, and ${money(t75)} if 75 or older.`,
     short: `For the ${ty} tax year (1 March 2026 to 28 February 2027), you pay no income tax if you earn less than <strong>${money(threshold)} a year</strong> and you're under 65. That's about ${money(threshold / 12)} a month.`,
     sections: [

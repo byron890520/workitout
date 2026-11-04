@@ -26,7 +26,7 @@ const homeIndex = groups.findIndex((g) => g.id === home);
     <div class="tools-groups">
       {groups.map((g) => (
         <section class={"tools-group" + (g.id === home ? " active" : "")} id={`tg-${g.id}`} role="tabpanel" aria-labelledby={`tt-${g.id}`}>
-          <h2 class="tools-group-h">{g.label}</h2>
+          <p class="tools-group-h">{g.label}</p>
           <ul>
             {items.filter((it) => it.group === g.id).map((it, i) => {
               const here = current.startsWith(it.href);

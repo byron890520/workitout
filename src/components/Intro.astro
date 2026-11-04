@@ -31,7 +31,10 @@ let i = 0;
   var seen = false;
   try { seen = !!localStorage.getItem("wio-intro"); localStorage.setItem("wio-intro", "1"); } catch (e) { seen = true; }
   var replay = location.hash === "#intro";
-  if (!replay && (bot || calm || seen || location.search)) { el.remove(); return; }
+  // Visitors arriving from Google or another site came for a tool, so they go straight in.
+  var fromElsewhere = false;
+  try { fromElsewhere = !!document.referrer && new URL(document.referrer).host !== location.host; } catch (e) {}
+  if (!replay && (bot || calm || seen || fromElsewhere || location.search)) { el.remove(); return; }
   el.hidden = false;
   el.removeAttribute("aria-hidden");
   document.documentElement.classList.add("intro-on");
