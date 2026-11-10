@@ -258,5 +258,15 @@
     "example_af": "Die mense in die dorp is baie vriendelik.",
     "example_en": "The people in the town are very friendly.",
     "note": "Add 'on-' to get the opposite: 'onvriendelik' means unfriendly."
+  },
+  {
+    "date": "2026-11-10",
+    "word": "hardloop",
+    "type_af": "werkwoord",
+    "type_en": "verb",
+    "meaning": "To run.",
+    "example_af": "Ek hardloop elke oggend saam met my hond in die park.",
+    "example_en": "I run in the park with my dog every morning.",
+    "note": "Don't confuse it with 'loop', which usually means to walk; the past tense is 'het gehardloop'."
   }
 ]
