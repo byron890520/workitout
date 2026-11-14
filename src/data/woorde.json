@@ -298,5 +298,15 @@
     "example_af": "Ek is baie dankbaar vir al jou hulp.",
     "example_en": "I am very grateful for all your help.",
     "note": "Say 'dankbaar vir' (grateful for); the noun is 'dankbaarheid' (gratitude)."
+  },
+  {
+    "date": "2026-11-14",
+    "word": "oefen",
+    "type_af": "werkwoord",
+    "type_en": "verb",
+    "meaning": "To practise something, or to exercise and train.",
+    "example_af": "Ek oefen elke dag my Afrikaans.",
+    "example_en": "I practise my Afrikaans every day.",
+    "note": "The noun is \"oefening\" (an exercise or practice), and \"hy oefen by die gim\" means he works out at the gym."
   }
 ]
