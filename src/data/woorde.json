@@ -308,5 +308,15 @@
     "example_af": "Ek oefen elke dag my Afrikaans.",
     "example_en": "I practise my Afrikaans every day.",
     "note": "The noun is \"oefening\" (an exercise or practice), and \"hy oefen by die gim\" means he works out at the gym."
+  },
+  {
+    "date": "2026-11-15",
+    "word": "ontspan",
+    "type_af": "werkwoord",
+    "type_en": "verb",
+    "meaning": "To relax or unwind.",
+    "example_af": "Op Sondae ontspan ons graag in die tuin.",
+    "example_en": "On Sundays we like to relax in the garden.",
+    "note": "The noun is \"ontspanning\" (relaxation), and \"ontspanne\" means relaxed."
   }
 ]
