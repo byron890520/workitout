@@ -338,5 +338,15 @@
     "example_af": "Ek is baie dors, kan ek asseblief 'n glas water kry?",
     "example_en": "I am very thirsty, may I please have a glass of water?",
     "note": "Afrikaans says 'ek is dors' (I am thirsty) – you don't 'have' thirst like in some languages; 'dors' is also the noun 'thirst'."
+  },
+  {
+    "date": "2026-11-18",
+    "word": "bakkie",
+    "type_af": "selfstandige naamwoord",
+    "type_en": "noun",
+    "meaning": "A small pickup truck with an open load area at the back.",
+    "example_af": "Ons het al die kampeergoed agter op die bakkie gelaai.",
+    "example_en": "We loaded all the camping gear onto the back of the bakkie.",
+    "note": "South Africans use 'bakkie' in English too; it can also mean a small bowl or plastic container, as in 'n bakkie roomys."
   }
 ]
