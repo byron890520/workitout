@@ -292,5 +292,12 @@
     "answer": "SPICY",
     "clue": "Full of heat and bold flavour, like a proper Durban curry that leaves your mouth tingling.",
     "number": 1985
+  },
+  {
+    "game": "wordle",
+    "date": "2026-11-26",
+    "answer": "TENSE",
+    "clue": "How you might feel waiting for the Springboks to kick the last-minute penalty: wound up and unable to relax.",
+    "number": 1986
   }
 ]
